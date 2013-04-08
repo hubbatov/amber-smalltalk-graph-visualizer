@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="ru">
+	<head>
+		<title>Graph visualizer</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link href="style.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript" src="../../js/amber.js"></script>
+		<script src="../_lib/jquery.min.js"></script>
+		<script src="../_lib/arbor.js"></script>  
+		<script src="../_lib/graph.format.js"></script>  
+		<script type="text/javascript">    
+	      	loadAmber({ 
+				files: ['Graphs.js'], 
+				prefix: 'projects/GraphVisualizer/js', 
+				ready: function() {
+	      					$(function() {
+	        					smalltalk.GraphVisualizer._new()._init();
+	      					});
+	     				}
+	     		});
+    	</script>
+	</head>
+	<body>
+		<div id="toolBar">
+		  		<input id="browserButton" class="toolbutton" type="button" value="OpenBrowser" onclick="smalltalk.Browser._open()"></button>
+		</div>
+		<canvas id="viewport" width="600" height="400"></canvas>
+		<div id="menuBar">
+			   	<input type="button" size="40" value="Add node" onclick="smalltalk.GraphVisualizer._new()._addNode();">
+   				<input id="newNodeName" type="text" size="40"><br>
+   				<input type="button" size="40" value="Add edge" onclick="smalltalk.GraphVisualizer._new()._addEdge();">
+   				<select id= "newSrc" size="1">
+   				</select>
+   				<select id= "newDest" size="1">
+   				</select><br>
+   				<input type="button" size="40" value="Delete node" onclick="smalltalk.GraphVisualizer._new()._removeNode();">
+   				<input id="selectedNode" type="text" size="40"><br>
+		</div>
+	</body>
+</html>

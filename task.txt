@@ -1,0 +1,47 @@
+==================================================================
+Server:
+
+- Pharo 1.3
+- WebSockets
+
+Client:
+
+- Amber
+- WebSocket
+- Arbor.js
+- Raphael.js
+
+==================================================================
+
+Data structure:
+
+- User
+	- firstName				(String)
+	- lastName				(String)
+	- password				(String)
+	- gender				(Boolean)
+	- friendList				(OrderedCollection <User>)
+	- picture				(Path to image)
+	- userId				(String) - (Имя + фамилия)
+
+- Client representation
+	- node					(GraphNode) - name = (имя + фамилия)
+	- edge					(GraphEdge) - scr и dest = (имя + фамилия)
+	- addFriend button			(AddEdge)
+	- removeFriend button			(RemoveNode)
+	- currentUser				(String) - (имя + фамилия)
+	- authorization				(Login)
+	- exit					(Logout)
+	- registration				(Register)
+
+
+- Server
+	- Starting server
+	- Stopping server
+	- Emit event (Add friend, Remove friend)
+	- Commands:
+		- Add new user (registration)
+		- Add friend
+		- Remove friend
+		- Authorization
+		- Logout
