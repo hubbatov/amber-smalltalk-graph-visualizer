@@ -26,17 +26,17 @@
 		<div id="toolBar">
 		  		<input id="browserButton" class="toolbutton" type="button" value="OpenBrowser" onclick="smalltalk.Browser._open()"></button>
 		</div>
-		<canvas id="viewport" width="600" height="400"></canvas>
-		<div id="menuBar">
-			   	<input type="button" size="40" value="Add node" onclick="smalltalk.GraphVisualizer._new()._addNode();">
-   				<input id="newNodeName" type="text" size="40"><br>
-   				<input type="button" size="40" value="Add edge" onclick="smalltalk.GraphVisualizer._new()._addEdge();">
-   				<select id= "newSrc" size="1">
-   				</select>
-   				<select id= "newDest" size="1">
-   				</select><br>
-   				<input type="button" size="40" value="Delete node" onclick="smalltalk.GraphVisualizer._new()._removeNode();">
-   				<input id="selectedNode" type="text" size="40"><br>
+		<div id="registrationDiv">
+			User name <br>
+			<input id="username" class="registration" type="text"><br>
+			User surname <br>
+			<input id="usersurname" class="registration" type="text"><br>
+			User login <br>
+			<input id="login" class="registration" type="text"><br>
+			User password <br>
+			<input id="password" class="registration" type="text"><br>
+			<input id="register" class="registration" type="button" value="Register"><br>
 		</div>
+		<canvas id="viewport" width="600" height="400"></canvas>
 	</body>
 </html>

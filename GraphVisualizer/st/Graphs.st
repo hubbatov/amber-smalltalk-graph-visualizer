@@ -1,4 +1,28 @@
 Smalltalk current createPackage: 'Graphs'!
+Object subclass: #GraphConnector
+	instanceVariableNames: 'socket'
+	package: 'Graphs'!
+
+!GraphConnector methodsFor: 'not yet classified'!
+
+connection
+	^socket
+!
+
+createSocket
+	socket := WebSocket value: 'ws://localhost:9900/broadcast'.
+	socket onopen: [ window alert: 'Connection opened' ].
+	socket onmessage: [ :evt | window alert: ( evt data )  ].
+	socket onclose: [ window alert: 'Connection closed' ].
+!
+
+createSocket: aBlock
+	socket := WebSocket value: 'ws://localhost:9900/broadcast'.
+	socket onopen: [ window alert: 'Connection opened' ].
+	socket onmessage: aBlock.
+	socket onclose: [ window alert: 'Connection closed' ].
+! !
+
 Object subclass: #GraphEdge
 	instanceVariableNames: 'src dest'
 	package: 'Graphs'!
@@ -36,7 +60,7 @@ name: aName
 ! !
 
 Object subclass: #GraphVisualizer
-	instanceVariableNames: 'nodes edges'
+	instanceVariableNames: 'socket'
 	package: 'Graphs'!
 
 !GraphVisualizer methodsFor: 'not yet classified'!
@@ -73,7 +97,7 @@ addOption: opText toList: aList
 !
 
 clearOptions: aList
-	1 to: ( aList length )do: [ aList options remove ].
+	"1 to: (aList length) do: [ (aList length ) > 0 ifTrue: [ aList options remove ]  ]"
 !
 
 draw
@@ -93,21 +117,21 @@ draw
 !
 
 init
-	nodes := Array new.
-	edges := Array new.
-	document asJQuery ready: [  self loadData ].
+	socket := ( GraphConnector new createSocket: [ :evt | self processMessage: ( evt data ) ] ) connection.
+	( document getElementById: 'register' ) asJQuery click: [ self registerUser ]
 !
 
-loadData
-	jQuery getJSON: 'data.json' process: [ : data |  GraphVisualizer currentNodes: ( data nodes ) . 
-																			   GraphVisualizer currentEdges: ( data edges).
-																			   self draw ].
+processMessage: aMessage
+	(aMessage match: 'Service#')  ifTrue: [ window alert: (aMessage replace: 'Service#' with: '') ].
 !
 
-saveData
-	| data |
-	data := sys asJSON.
-	jQuery post: 'data1.json' string: data callback: [ :returnedData |  window alert: 'Data saved' ] .
+registerUser
+		|name surname login password|
+		name := ( document getElementById: 'username' ) value.
+		surname := ( document getElementById: 'usersurname' ) value.
+		login := ( document getElementById: 'login' ) value.
+		password := ( document getElementById: 'password' ) value.
+		socket send: ( 'Register#ChatUser registerUser: (ChatUser new firstname: ', '''' , name, '''' , '; lastname: ', '''' , surname , '''' , '; login: ', '''' , login, '''' , '; password: ', '''', password, '''' ,')' ) .
 ! !
 
 GraphVisualizer class instanceVariableNames: 'nodes edges'!

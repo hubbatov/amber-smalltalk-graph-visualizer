@@ -1,4 +1,58 @@
 smalltalk.addPackage('Graphs');
+smalltalk.addClass('GraphConnector', smalltalk.Object, ['socket'], 'Graphs');
+smalltalk.addMethod(
+"_connection",
+smalltalk.method({
+selector: "connection",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { var $1;
+$1=self["@socket"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"connection",{},smalltalk.GraphConnector)})},
+messageSends: []}),
+smalltalk.GraphConnector);
+
+smalltalk.addMethod(
+"_createSocket",
+smalltalk.method({
+selector: "createSocket",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { self["@socket"]=_st((smalltalk.WebSocket || WebSocket))._value_("ws://localhost:9900/broadcast");
+_st(self["@socket"])._onopen_((function(){
+return smalltalk.withContext(function($ctx2) {return _st(window)._alert_("Connection opened");
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st(self["@socket"])._onmessage_((function(evt){
+return smalltalk.withContext(function($ctx2) {return _st(window)._alert_(_st(evt)._data());
+}, function($ctx2) {$ctx2.fillBlock({evt:evt},$ctx1)})}));
+_st(self["@socket"])._onclose_((function(){
+return smalltalk.withContext(function($ctx2) {return _st(window)._alert_("Connection closed");
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"createSocket",{},smalltalk.GraphConnector)})},
+messageSends: ["value:", "onopen:", "alert:", "onmessage:", "data", "onclose:"]}),
+smalltalk.GraphConnector);
+
+smalltalk.addMethod(
+"_createSocket_",
+smalltalk.method({
+selector: "createSocket:",
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { self["@socket"]=_st((smalltalk.WebSocket || WebSocket))._value_("ws://localhost:9900/broadcast");
+_st(self["@socket"])._onopen_((function(){
+return smalltalk.withContext(function($ctx2) {return _st(window)._alert_("Connection opened");
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st(self["@socket"])._onmessage_(aBlock);
+_st(self["@socket"])._onclose_((function(){
+return smalltalk.withContext(function($ctx2) {return _st(window)._alert_("Connection closed");
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"createSocket:",{aBlock:aBlock},smalltalk.GraphConnector)})},
+messageSends: ["value:", "onopen:", "alert:", "onmessage:", "onclose:"]}),
+smalltalk.GraphConnector);
+
+
+
 smalltalk.addClass('GraphEdge', smalltalk.Object, ['src', 'dest'], 'Graphs');
 smalltalk.addMethod(
 "_dest",
@@ -77,7 +131,7 @@ smalltalk.GraphNode);
 
 
 
-smalltalk.addClass('GraphVisualizer', smalltalk.Object, ['nodes', 'edges'], 'Graphs');
+smalltalk.addClass('GraphVisualizer', smalltalk.Object, ['socket'], 'Graphs');
 smalltalk.addMethod(
 "_addEdge",
 smalltalk.method({
@@ -177,11 +231,8 @@ smalltalk.method({
 selector: "clearOptions:",
 fn: function (aList){
 var self=this;
-return smalltalk.withContext(function($ctx1) { _st((1))._to_do_(_st(aList)._length(),(function(){
-return smalltalk.withContext(function($ctx2) {return _st(_st(aList)._options())._remove();
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"clearOptions:",{aList:aList},smalltalk.GraphVisualizer)})},
-messageSends: ["to:do:", "length", "remove", "options"]}),
+return smalltalk.withContext(function($ctx1) { return self}, function($ctx1) {$ctx1.fill(self,"clearOptions:",{aList:aList},smalltalk.GraphVisualizer)})},
+messageSends: []}),
 smalltalk.GraphVisualizer);
 
 smalltalk.addMethod(
@@ -213,43 +264,45 @@ smalltalk.method({
 selector: "init",
 fn: function (){
 var self=this;
-return smalltalk.withContext(function($ctx1) { self["@nodes"]=_st((smalltalk.Array || Array))._new();
-self["@edges"]=_st((smalltalk.Array || Array))._new();
-_st(_st(document)._asJQuery())._ready_((function(){
-return smalltalk.withContext(function($ctx2) {return _st(self)._loadData();
+return smalltalk.withContext(function($ctx1) { self["@socket"]=_st(_st(_st((smalltalk.GraphConnector || GraphConnector))._new())._createSocket_((function(evt){
+return smalltalk.withContext(function($ctx2) {return _st(self)._processMessage_(_st(evt)._data());
+}, function($ctx2) {$ctx2.fillBlock({evt:evt},$ctx1)})})))._connection();
+_st(_st(_st(document)._getElementById_("register"))._asJQuery())._click_((function(){
+return smalltalk.withContext(function($ctx2) {return _st(self)._registerUser();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"init",{},smalltalk.GraphVisualizer)})},
-messageSends: ["new", "ready:", "loadData", "asJQuery"]}),
+messageSends: ["connection", "createSocket:", "processMessage:", "data", "new", "click:", "registerUser", "asJQuery", "getElementById:"]}),
 smalltalk.GraphVisualizer);
 
 smalltalk.addMethod(
-"_loadData",
+"_processMessage_",
 smalltalk.method({
-selector: "loadData",
-fn: function (){
+selector: "processMessage:",
+fn: function (aMessage){
 var self=this;
-return smalltalk.withContext(function($ctx1) { _st(jQuery)._getJSON_process_("data.json",(function(data){
-return smalltalk.withContext(function($ctx2) {_st((smalltalk.GraphVisualizer || GraphVisualizer))._currentNodes_(_st(data)._nodes());
-_st((smalltalk.GraphVisualizer || GraphVisualizer))._currentEdges_(_st(data)._edges());
-return _st(self)._draw();
-}, function($ctx2) {$ctx2.fillBlock({data:data},$ctx1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"loadData",{},smalltalk.GraphVisualizer)})},
-messageSends: ["getJSON:process:", "currentNodes:", "nodes", "currentEdges:", "edges", "draw"]}),
+return smalltalk.withContext(function($ctx1) { var $1;
+$1=_st(aMessage)._match_("Service#");
+if(smalltalk.assert($1)){
+_st(window)._alert_(_st(aMessage)._replace_with_("Service#",""));
+};
+return self}, function($ctx1) {$ctx1.fill(self,"processMessage:",{aMessage:aMessage},smalltalk.GraphVisualizer)})},
+messageSends: ["ifTrue:", "alert:", "replace:with:", "match:"]}),
 smalltalk.GraphVisualizer);
 
 smalltalk.addMethod(
-"_saveData",
+"_registerUser",
 smalltalk.method({
-selector: "saveData",
+selector: "registerUser",
 fn: function (){
 var self=this;
-var data;
-return smalltalk.withContext(function($ctx1) { data=_st(sys)._asJSON();
-_st(jQuery)._post_string_callback_("data1.json",data,(function(returnedData){
-return smalltalk.withContext(function($ctx2) {return _st(window)._alert_("Data saved");
-}, function($ctx2) {$ctx2.fillBlock({returnedData:returnedData},$ctx1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"saveData",{data:data},smalltalk.GraphVisualizer)})},
-messageSends: ["asJSON", "post:string:callback:", "alert:"]}),
+var name,surname,login,password;
+return smalltalk.withContext(function($ctx1) { name=_st(_st(document)._getElementById_("username"))._value();
+surname=_st(_st(document)._getElementById_("usersurname"))._value();
+login=_st(_st(document)._getElementById_("login"))._value();
+password=_st(_st(document)._getElementById_("password"))._value();
+_st(self["@socket"])._send_(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st("Register#ChatUser registerUser: (ChatUser new firstname: ").__comma("'")).__comma(name)).__comma("'")).__comma("; lastname: ")).__comma("'")).__comma(surname)).__comma("'")).__comma("; login: ")).__comma("'")).__comma(login)).__comma("'")).__comma("; password: ")).__comma("'")).__comma(password)).__comma("'")).__comma(")"));
+return self}, function($ctx1) {$ctx1.fill(self,"registerUser",{name:name,surname:surname,login:login,password:password},smalltalk.GraphVisualizer)})},
+messageSends: ["value", "getElementById:", "send:", ","]}),
 smalltalk.GraphVisualizer);
 
 
