@@ -22,14 +22,14 @@ Data structure:
 	- gender				(Boolean)
 	- friendList				(OrderedCollection <User>)
 	- picture				(Path to image)
-	- userId				(String) - (Имя + фамилия)
+	- userId				(String) - (firstName + lastName)
 
 - Client representation
-	- node					(GraphNode) - name = (имя + фамилия)
-	- edge					(GraphEdge) - scr и dest = (имя + фамилия)
+	- node					(GraphNode) - name = (firstName + lastName)
+	- edge					(GraphEdge) - scr и dest = (firstName + lastName)
 	- addFriend button			(AddEdge)
 	- removeFriend button			(RemoveNode)
-	- currentUser				(String) - (имя + фамилия)
+	- currentUser				(String) - (firstName + lastName)
 	- authorization				(Login)
 	- exit					(Logout)
 	- registration				(Register)
