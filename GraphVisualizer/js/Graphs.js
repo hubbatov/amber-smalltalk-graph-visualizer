@@ -19,31 +19,6 @@ referencedClasses: []
 smalltalk.GraphConnector);
 
 smalltalk.addMethod(
-"_createSocket",
-smalltalk.method({
-selector: "createSocket",
-category: 'not yet classified',
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { self["@socket"]=_st((smalltalk.WebSocket || WebSocket))._value_("ws://localhost:9900/broadcast");
-_st(self["@socket"])._onopen_((function(){
-return smalltalk.withContext(function($ctx2) {return _st(window)._alert_("Connection opened");
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
-_st(self["@socket"])._onmessage_((function(evt){
-return smalltalk.withContext(function($ctx2) {return _st(window)._alert_(_st(evt)._data());
-}, function($ctx2) {$ctx2.fillBlock({evt:evt},$ctx1)})}));
-_st(self["@socket"])._onclose_((function(){
-return smalltalk.withContext(function($ctx2) {return _st(window)._alert_("Connection closed");
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"createSocket",{},smalltalk.GraphConnector)})},
-args: [],
-source: "createSocket\x0a\x09socket := WebSocket value: 'ws://localhost:9900/broadcast'.\x0a\x09socket onopen: [ window alert: 'Connection opened' ].\x0a\x09socket onmessage: [ :evt | window alert: ( evt data )  ].\x0a\x09socket onclose: [ window alert: 'Connection closed' ].",
-messageSends: ["value:", "onopen:", "alert:", "onmessage:", "data", "onclose:"],
-referencedClasses: ["WebSocket"]
-}),
-smalltalk.GraphConnector);
-
-smalltalk.addMethod(
 "_createSocket_",
 smalltalk.method({
 selector: "createSocket:",
@@ -60,7 +35,7 @@ return smalltalk.withContext(function($ctx2) {return _st(window)._alert_("Conne
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"createSocket:",{aBlock:aBlock},smalltalk.GraphConnector)})},
 args: ["aBlock"],
-source: "createSocket: aBlock\x0a\x09socket := WebSocket value: 'ws://localhost:9900/broadcast'.\x0a\x09socket onopen: [ window alert: 'Connection opened' ].\x0a\x09socket onmessage: aBlock.\x0a\x09socket onclose: [ window alert: 'Connection closed' ].",
+source: "createSocket: aBlock\x0a\x09socket := WebSocket  value: 'ws://localhost:9900/broadcast'.\x0a\x09socket onopen: [ window alert: 'Connection opened' ].\x0a\x09socket onmessage: aBlock.\x0a\x09socket onclose: [ window alert: 'Connection closed' ].",
 messageSends: ["value:", "onopen:", "alert:", "onmessage:", "onclose:"],
 referencedClasses: ["WebSocket"]
 }),
@@ -348,14 +323,36 @@ var self=this;
 return smalltalk.withContext(function($ctx1) { self["@socket"]=_st(_st(_st((smalltalk.GraphConnector || GraphConnector))._new())._createSocket_((function(evt){
 return smalltalk.withContext(function($ctx2) {return _st(self)._processMessage_(_st(evt)._data());
 }, function($ctx2) {$ctx2.fillBlock({evt:evt},$ctx1)})})))._connection();
-_st(_st(_st(document)._getElementById_("register"))._asJQuery())._click_((function(){
+_st(_st(_st(document)._getElementById_("b_register"))._asJQuery())._click_((function(){
 return smalltalk.withContext(function($ctx2) {return _st(self)._registerUser();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st(_st(_st(document)._getElementById_("b_login"))._asJQuery())._click_((function(){
+return smalltalk.withContext(function($ctx2) {return _st(self)._login();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"init",{},smalltalk.GraphVisualizer)})},
 args: [],
-source: "init\x0a\x09socket := ( GraphConnector new createSocket: [ :evt | self processMessage: ( evt data ) ] ) connection.\x0a\x09( document getElementById: 'register' ) asJQuery click: [ self registerUser ]",
-messageSends: ["connection", "createSocket:", "processMessage:", "data", "new", "click:", "registerUser", "asJQuery", "getElementById:"],
+source: "init\x0a\x09socket := ( GraphConnector new createSocket: [ :evt | self processMessage: ( evt data ) ] ) connection.\x0a\x09( document getElementById: 'b_register' ) asJQuery click: [ self registerUser ].\x0a\x09( document getElementById: 'b_login' ) asJQuery click: [ self login ]",
+messageSends: ["connection", "createSocket:", "processMessage:", "data", "new", "click:", "registerUser", "asJQuery", "getElementById:", "login"],
 referencedClasses: ["GraphConnector"]
+}),
+smalltalk.GraphVisualizer);
+
+smalltalk.addMethod(
+"_login",
+smalltalk.method({
+selector: "login",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+var login,password;
+return smalltalk.withContext(function($ctx1) { login=_st(_st(document)._getElementById_("l_login"))._value();
+password=_st(_st(document)._getElementById_("l_password"))._value();
+_st(self["@socket"])._send_(_st(_st(_st(_st(_st(_st(_st("Login#ChatUser findByLogin: ").__comma("'")).__comma(login)).__comma("'")).__comma(" andPassword: ")).__comma("'")).__comma(password)).__comma("'"));
+return self}, function($ctx1) {$ctx1.fill(self,"login",{login:login,password:password},smalltalk.GraphVisualizer)})},
+args: [],
+source: "login\x0a\x09\x09| login password|\x0a\x09\x09login := ( document getElementById: 'l_login' ) value.\x0a\x09\x09password := ( document getElementById: 'l_password' ) value.\x0a\x09\x09socket send: ( 'Login#ChatUser findByLogin: ', '''' , login, '''' , ' andPassword: ', '''', password, ''''  ) .",
+messageSends: ["value", "getElementById:", "send:", ","],
+referencedClasses: []
 }),
 smalltalk.GraphVisualizer);
 
@@ -387,14 +384,14 @@ category: 'not yet classified',
 fn: function (){
 var self=this;
 var name,surname,login,password;
-return smalltalk.withContext(function($ctx1) { name=_st(_st(document)._getElementById_("username"))._value();
-surname=_st(_st(document)._getElementById_("usersurname"))._value();
-login=_st(_st(document)._getElementById_("login"))._value();
-password=_st(_st(document)._getElementById_("password"))._value();
+return smalltalk.withContext(function($ctx1) { name=_st(_st(document)._getElementById_("r_username"))._value();
+surname=_st(_st(document)._getElementById_("r_usersurname"))._value();
+login=_st(_st(document)._getElementById_("r_login"))._value();
+password=_st(_st(document)._getElementById_("r_password"))._value();
 _st(self["@socket"])._send_(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st("Register#ChatUser registerUser: (ChatUser new firstname: ").__comma("'")).__comma(name)).__comma("'")).__comma("; lastname: ")).__comma("'")).__comma(surname)).__comma("'")).__comma("; login: ")).__comma("'")).__comma(login)).__comma("'")).__comma("; password: ")).__comma("'")).__comma(password)).__comma("'")).__comma(")"));
 return self}, function($ctx1) {$ctx1.fill(self,"registerUser",{name:name,surname:surname,login:login,password:password},smalltalk.GraphVisualizer)})},
 args: [],
-source: "registerUser\x0a\x09\x09|name surname login password|\x0a\x09\x09name := ( document getElementById: 'username' ) value.\x0a\x09\x09surname := ( document getElementById: 'usersurname' ) value.\x0a\x09\x09login := ( document getElementById: 'login' ) value.\x0a\x09\x09password := ( document getElementById: 'password' ) value.\x0a\x09\x09socket send: ( 'Register#ChatUser registerUser: (ChatUser new firstname: ', '''' , name, '''' , '; lastname: ', '''' , surname , '''' , '; login: ', '''' , login, '''' , '; password: ', '''', password, '''' ,')' ) .\x0a\x09\x09",
+source: "registerUser\x0a\x09\x09|name surname login password|\x0a\x09\x09name := ( document getElementById: 'r_username' ) value.\x0a\x09\x09surname := ( document getElementById: 'r_usersurname' ) value.\x0a\x09\x09login := ( document getElementById: 'r_login' ) value.\x0a\x09\x09password := ( document getElementById: 'r_password' ) value.\x0a\x09\x09socket send: ( 'Register#ChatUser registerUser: (ChatUser new firstname: ', '''' , name, '''' , '; lastname: ', '''' , surname , '''' , '; login: ', '''' , login, '''' , '; password: ', '''', password, '''' ,')' ) .\x0a\x09\x0a\x09",
 messageSends: ["value", "getElementById:", "send:", ","],
 referencedClasses: []
 }),

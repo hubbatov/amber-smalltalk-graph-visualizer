@@ -9,15 +9,8 @@ connection
 	^socket
 !
 
-createSocket
-	socket := WebSocket value: 'ws://localhost:9900/broadcast'.
-	socket onopen: [ window alert: 'Connection opened' ].
-	socket onmessage: [ :evt | window alert: ( evt data )  ].
-	socket onclose: [ window alert: 'Connection closed' ].
-!
-
 createSocket: aBlock
-	socket := WebSocket value: 'ws://localhost:9900/broadcast'.
+	socket := WebSocket  value: 'ws://localhost:9900/broadcast'.
 	socket onopen: [ window alert: 'Connection opened' ].
 	socket onmessage: aBlock.
 	socket onclose: [ window alert: 'Connection closed' ].
@@ -118,7 +111,15 @@ draw
 
 init
 	socket := ( GraphConnector new createSocket: [ :evt | self processMessage: ( evt data ) ] ) connection.
-	( document getElementById: 'register' ) asJQuery click: [ self registerUser ]
+	( document getElementById: 'b_register' ) asJQuery click: [ self registerUser ].
+	( document getElementById: 'b_login' ) asJQuery click: [ self login ]
+!
+
+login
+		| login password|
+		login := ( document getElementById: 'l_login' ) value.
+		password := ( document getElementById: 'l_password' ) value.
+		socket send: ( 'Login#ChatUser findByLogin: ', '''' , login, '''' , ' andPassword: ', '''', password, ''''  ) .
 !
 
 processMessage: aMessage
@@ -127,10 +128,10 @@ processMessage: aMessage
 
 registerUser
 		|name surname login password|
-		name := ( document getElementById: 'username' ) value.
-		surname := ( document getElementById: 'usersurname' ) value.
-		login := ( document getElementById: 'login' ) value.
-		password := ( document getElementById: 'password' ) value.
+		name := ( document getElementById: 'r_username' ) value.
+		surname := ( document getElementById: 'r_usersurname' ) value.
+		login := ( document getElementById: 'r_login' ) value.
+		password := ( document getElementById: 'r_password' ) value.
 		socket send: ( 'Register#ChatUser registerUser: (ChatUser new firstname: ', '''' , name, '''' , '; lastname: ', '''' , surname , '''' , '; login: ', '''' , login, '''' , '; password: ', '''', password, '''' ,')' ) .
 ! !
 

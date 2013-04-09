@@ -9,13 +9,34 @@
     background: #fc0; 
     border: solid 1px black; 
     padding: 10px; 
-    overflow: auto; 
 }
 .registration{
     width: 270px;
 }
 
-#register{
+#b_register{
+    padding: 0px; 
+    margin: 15px;
+    width: 250px;
+}
+
+#loginDiv {
+    position: absolute; 
+    width: 280px; 
+    height: 120px; 
+    left: 50%; 
+    top: 50%; 
+    margin-left: -150px; 
+    margin-top: -300px; 
+    background: #fc0; 
+    border: solid 1px black; 
+    padding: 10px; 
+}
+.logining{
+    width: 270px;
+}
+
+#b_login{
     padding: 0px; 
     margin: 15px;
     width: 250px;
