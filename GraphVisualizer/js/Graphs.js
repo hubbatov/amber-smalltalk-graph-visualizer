@@ -227,7 +227,7 @@ selector: "processMessage:",
 category: 'not yet classified',
 fn: function (aMessage){
 var self=this;
-return smalltalk.withContext(function($ctx1) { var $1,$2,$3,$4,$5;
+return smalltalk.withContext(function($ctx1) { var $1,$2,$3,$4,$5,$6;
 $1=_st(aMessage)._match_("Service#");
 if(smalltalk.assert($1)){
 _st(window)._alert_(_st(aMessage)._replace_with_("Service#",""));
@@ -253,10 +253,14 @@ $5=_st(aMessage)._match_("Node#");
 if(smalltalk.assert($5)){
 _st(_st((smalltalk.Compiler || Compiler))._new())._evaluateExpression_(_st(aMessage)._replace_with_("Node#",""));
 };
+$6=_st(aMessage)._match_("Edge#");
+if(smalltalk.assert($6)){
+_st(_st((smalltalk.Compiler || Compiler))._new())._evaluateExpression_(_st(aMessage)._replace_with_("Edge#",""));
+};
 };
 return self}, function($ctx1) {$ctx1.fill(self,"processMessage:",{aMessage:aMessage},smalltalk.GraphVisualizer)})},
 args: ["aMessage"],
-source: "processMessage: aMessage\x0a\x09\x0a\x09(aMessage match: 'Service#')  ifTrue: [ window alert: (aMessage replace: 'Service#' with: '') ].\x0a\x09(aMessage match: 'Login#')  ifTrue: [ window alert: (aMessage replace: 'Login#' with: ''). self showForms: true. socket send: 'GetUsers#'. logged := true ].\x0a\x09(aMessage match: 'Logout#')  ifTrue: [ window alert: (aMessage replace: 'Logout#' with: ''). self showForms: false. logged := false ].\x0a\x09\x0a\x09self isLogged ifTrue: [\x0a\x09\x09\x09\x09(aMessage match: 'Node#')  ifTrue: [ Compiler new evaluateExpression:  (aMessage replace: 'Node#' with: '') ] .\x0a].\x0a\x09",
+source: "processMessage: aMessage\x0a\x09\x0a\x09(aMessage match: 'Service#')  ifTrue: [ window alert: (aMessage replace: 'Service#' with: '') ].\x0a\x09(aMessage match: 'Login#')  ifTrue: [ window alert: (aMessage replace: 'Login#' with: ''). self showForms: true. socket send: 'GetUsers#'. logged := true ].\x0a\x09(aMessage match: 'Logout#')  ifTrue: [ window alert: (aMessage replace: 'Logout#' with: ''). self showForms: false. logged := false ].\x0a\x09\x0a\x09self isLogged ifTrue: [\x0a\x09\x09\x09\x09(aMessage match: 'Node#')  ifTrue: [ Compiler new evaluateExpression:  (aMessage replace: 'Node#' with: '') ] .\x0a\x09\x09\x09\x09(aMessage match: 'Edge#')  ifTrue: [ Compiler new evaluateExpression:  (aMessage replace: 'Edge#' with: '') ] .\x0a].\x0a\x09",
 messageSends: ["ifTrue:", "alert:", "replace:with:", "match:", "showForms:", "send:", "evaluateExpression:", "new", "isLogged"],
 referencedClasses: ["Compiler"]
 }),

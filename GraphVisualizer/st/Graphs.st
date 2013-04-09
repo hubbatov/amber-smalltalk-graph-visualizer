@@ -84,6 +84,7 @@ processMessage: aMessage
 	
 	self isLogged ifTrue: [
 				(aMessage match: 'Node#')  ifTrue: [ Compiler new evaluateExpression:  (aMessage replace: 'Node#' with: '') ] .
+				(aMessage match: 'Edge#')  ifTrue: [ Compiler new evaluateExpression:  (aMessage replace: 'Edge#' with: '') ] .
 ].
 !
 
