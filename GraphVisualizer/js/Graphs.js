@@ -151,7 +151,7 @@ smalltalk.GraphNode);
 
 
 
-smalltalk.addClass('GraphVisualizer', smalltalk.Object, ['socket'], 'Graphs');
+smalltalk.addClass('GraphVisualizer', smalltalk.Object, ['socket', 'logged'], 'Graphs');
 smalltalk.addMethod(
 "_init",
 smalltalk.method({
@@ -168,17 +168,36 @@ return smalltalk.withContext(function($ctx2) {return _st(self)._registerUser();
 _st(_st(_st(document)._getElementById_("b_login"))._asJQuery())._click_((function(){
 return smalltalk.withContext(function($ctx2) {return _st(self)._login();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
-_st(window)._onload_((function(){
-return smalltalk.withContext(function($ctx2) {return _st(self)._resize();
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
-_st(window)._onresize_((function(){
-return smalltalk.withContext(function($ctx2) {return _st(self)._resize();
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"init",{},smalltalk.GraphVisualizer)})},
 args: [],
-source: "init\x0a\x09socket := ( GraphConnector new createSocket: [ :evt | self processMessage: ( evt data ) ] ) connection.\x0a\x09( document getElementById: 'b_register' ) asJQuery click: [ self registerUser ].\x0a\x09( document getElementById: 'b_login' ) asJQuery click: [ self login ].\x0a\x09window onload: [ self resize ].\x0a\x09window onresize: [ self resize ].",
-messageSends: ["connection", "createSocket:", "processMessage:", "data", "new", "click:", "registerUser", "asJQuery", "getElementById:", "login", "onload:", "resize", "onresize:"],
+source: "init\x0a\x09socket := ( GraphConnector new createSocket: [ :evt | self processMessage: ( evt data ) ] ) connection.\x0a\x09( document getElementById: 'b_register' ) asJQuery click: [ self registerUser ].\x0a\x09( document getElementById: 'b_login' ) asJQuery click: [ self login ].",
+messageSends: ["connection", "createSocket:", "processMessage:", "data", "new", "click:", "registerUser", "asJQuery", "getElementById:", "login"],
 referencedClasses: ["GraphConnector"]
+}),
+smalltalk.GraphVisualizer);
+
+smalltalk.addMethod(
+"_isLogged",
+smalltalk.method({
+selector: "isLogged",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { var $1,$2;
+$1=self["@logged"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@logged"]=false;
+self["@logged"];
+} else {
+$1;
+};
+$2=self["@logged"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"isLogged",{},smalltalk.GraphVisualizer)})},
+args: [],
+source: "isLogged\x0a\x09logged ifNil: [ logged := false ].\x0a\x09^logged",
+messageSends: ["ifNil:"],
+referencedClasses: []
 }),
 smalltalk.GraphVisualizer);
 
@@ -208,7 +227,7 @@ selector: "processMessage:",
 category: 'not yet classified',
 fn: function (aMessage){
 var self=this;
-return smalltalk.withContext(function($ctx1) { var $1,$2,$3,$4;
+return smalltalk.withContext(function($ctx1) { var $1,$2,$3,$4,$5;
 $1=_st(aMessage)._match_("Service#");
 if(smalltalk.assert($1)){
 _st(window)._alert_(_st(aMessage)._replace_with_("Service#",""));
@@ -218,20 +237,27 @@ if(smalltalk.assert($2)){
 _st(window)._alert_(_st(aMessage)._replace_with_("Login#",""));
 _st(self)._showForms_(true);
 _st(self["@socket"])._send_("GetUsers#");
+self["@logged"]=true;
+self["@logged"];
 };
 $3=_st(aMessage)._match_("Logout#");
 if(smalltalk.assert($3)){
 _st(window)._alert_(_st(aMessage)._replace_with_("Logout#",""));
 _st(self)._showForms_(false);
+self["@logged"]=false;
+self["@logged"];
 };
-$4=_st(aMessage)._match_("Node#");
+$4=_st(self)._isLogged();
 if(smalltalk.assert($4)){
+$5=_st(aMessage)._match_("Node#");
+if(smalltalk.assert($5)){
 _st(_st((smalltalk.Compiler || Compiler))._new())._evaluateExpression_(_st(aMessage)._replace_with_("Node#",""));
+};
 };
 return self}, function($ctx1) {$ctx1.fill(self,"processMessage:",{aMessage:aMessage},smalltalk.GraphVisualizer)})},
 args: ["aMessage"],
-source: "processMessage: aMessage\x0a\x09(aMessage match: 'Service#')  ifTrue: [ window alert: (aMessage replace: 'Service#' with: '') ].\x0a\x09(aMessage match: 'Login#')  ifTrue: [ window alert: (aMessage replace: 'Login#' with: ''). self showForms: true. socket send: 'GetUsers#' ].\x0a\x09(aMessage match: 'Logout#')  ifTrue: [ window alert: (aMessage replace: 'Logout#' with: ''). self showForms: false ].\x0a\x09(aMessage match: 'Node#')  ifTrue: [ Compiler new evaluateExpression:  (aMessage replace: 'Node#' with: '') ].\x0a\x09",
-messageSends: ["ifTrue:", "alert:", "replace:with:", "match:", "showForms:", "send:", "evaluateExpression:", "new"],
+source: "processMessage: aMessage\x0a\x09\x0a\x09(aMessage match: 'Service#')  ifTrue: [ window alert: (aMessage replace: 'Service#' with: '') ].\x0a\x09(aMessage match: 'Login#')  ifTrue: [ window alert: (aMessage replace: 'Login#' with: ''). self showForms: true. socket send: 'GetUsers#'. logged := true ].\x0a\x09(aMessage match: 'Logout#')  ifTrue: [ window alert: (aMessage replace: 'Logout#' with: ''). self showForms: false. logged := false ].\x0a\x09\x0a\x09self isLogged ifTrue: [\x0a\x09\x09\x09\x09(aMessage match: 'Node#')  ifTrue: [ Compiler new evaluateExpression:  (aMessage replace: 'Node#' with: '') ] .\x0a].\x0a\x09",
+messageSends: ["ifTrue:", "alert:", "replace:with:", "match:", "showForms:", "send:", "evaluateExpression:", "new", "isLogged"],
 referencedClasses: ["Compiler"]
 }),
 smalltalk.GraphVisualizer);
@@ -253,25 +279,6 @@ return self}, function($ctx1) {$ctx1.fill(self,"registerUser",{name:name,surname
 args: [],
 source: "registerUser\x0a\x09\x09|name surname login password|\x0a\x09\x09name := ( document getElementById: 'r_username' ) value.\x0a\x09\x09surname := ( document getElementById: 'r_usersurname' ) value.\x0a\x09\x09login := ( document getElementById: 'r_login' ) value.\x0a\x09\x09password := ( document getElementById: 'r_password' ) value.\x0a\x09\x09socket send: ( 'Register#ChatUser registerUser: (ChatUser new firstname: ', '''' , name, '''' , '; lastname: ', '''' , surname , '''' , '; login: ', '''' , login, '''' , '; password: ', '''', password, '''' ,')' ) .\x0a\x09\x0a\x09",
 messageSends: ["value", "getElementById:", "send:", ","],
-referencedClasses: []
-}),
-smalltalk.GraphVisualizer);
-
-smalltalk.addMethod(
-"_resize",
-smalltalk.method({
-selector: "resize",
-category: 'not yet classified',
-fn: function (){
-var self=this;
-var canvas;
-return smalltalk.withContext(function($ctx1) { canvas=_st(document)._getElementById_("viewport");
-_st(canvas)._width_(_st(_st(window)._innerWidth()).__minus((20)));
-_st(canvas)._height_(_st(_st(window)._innerHeight()).__minus((60)));
-return self}, function($ctx1) {$ctx1.fill(self,"resize",{canvas:canvas},smalltalk.GraphVisualizer)})},
-args: [],
-source: "resize\x0a\x09| canvas |\x0a\x09canvas := document getElementById: 'viewport'.\x0a    canvas width: ( window innerWidth - 20 ).\x0a    canvas height: ( window innerHeight - 60 )",
-messageSends: ["getElementById:", "width:", "-", "innerWidth", "height:", "innerHeight"],
 referencedClasses: []
 }),
 smalltalk.GraphVisualizer);

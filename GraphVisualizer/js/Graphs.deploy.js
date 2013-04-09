@@ -111,7 +111,7 @@ smalltalk.GraphNode);
 
 
 
-smalltalk.addClass('GraphVisualizer', smalltalk.Object, ['socket'], 'Graphs');
+smalltalk.addClass('GraphVisualizer', smalltalk.Object, ['socket', 'logged'], 'Graphs');
 smalltalk.addMethod(
 "_init",
 smalltalk.method({
@@ -127,14 +127,28 @@ return smalltalk.withContext(function($ctx2) {return _st(self)._registerUser();
 _st(_st(_st(document)._getElementById_("b_login"))._asJQuery())._click_((function(){
 return smalltalk.withContext(function($ctx2) {return _st(self)._login();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
-_st(window)._onload_((function(){
-return smalltalk.withContext(function($ctx2) {return _st(self)._resize();
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
-_st(window)._onresize_((function(){
-return smalltalk.withContext(function($ctx2) {return _st(self)._resize();
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"init",{},smalltalk.GraphVisualizer)})},
-messageSends: ["connection", "createSocket:", "processMessage:", "data", "new", "click:", "registerUser", "asJQuery", "getElementById:", "login", "onload:", "resize", "onresize:"]}),
+messageSends: ["connection", "createSocket:", "processMessage:", "data", "new", "click:", "registerUser", "asJQuery", "getElementById:", "login"]}),
+smalltalk.GraphVisualizer);
+
+smalltalk.addMethod(
+"_isLogged",
+smalltalk.method({
+selector: "isLogged",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { var $1,$2;
+$1=self["@logged"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@logged"]=false;
+self["@logged"];
+} else {
+$1;
+};
+$2=self["@logged"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"isLogged",{},smalltalk.GraphVisualizer)})},
+messageSends: ["ifNil:"]}),
 smalltalk.GraphVisualizer);
 
 smalltalk.addMethod(
@@ -157,7 +171,7 @@ smalltalk.method({
 selector: "processMessage:",
 fn: function (aMessage){
 var self=this;
-return smalltalk.withContext(function($ctx1) { var $1,$2,$3,$4;
+return smalltalk.withContext(function($ctx1) { var $1,$2,$3,$4,$5;
 $1=_st(aMessage)._match_("Service#");
 if(smalltalk.assert($1)){
 _st(window)._alert_(_st(aMessage)._replace_with_("Service#",""));
@@ -167,18 +181,25 @@ if(smalltalk.assert($2)){
 _st(window)._alert_(_st(aMessage)._replace_with_("Login#",""));
 _st(self)._showForms_(true);
 _st(self["@socket"])._send_("GetUsers#");
+self["@logged"]=true;
+self["@logged"];
 };
 $3=_st(aMessage)._match_("Logout#");
 if(smalltalk.assert($3)){
 _st(window)._alert_(_st(aMessage)._replace_with_("Logout#",""));
 _st(self)._showForms_(false);
+self["@logged"]=false;
+self["@logged"];
 };
-$4=_st(aMessage)._match_("Node#");
+$4=_st(self)._isLogged();
 if(smalltalk.assert($4)){
+$5=_st(aMessage)._match_("Node#");
+if(smalltalk.assert($5)){
 _st(_st((smalltalk.Compiler || Compiler))._new())._evaluateExpression_(_st(aMessage)._replace_with_("Node#",""));
 };
+};
 return self}, function($ctx1) {$ctx1.fill(self,"processMessage:",{aMessage:aMessage},smalltalk.GraphVisualizer)})},
-messageSends: ["ifTrue:", "alert:", "replace:with:", "match:", "showForms:", "send:", "evaluateExpression:", "new"]}),
+messageSends: ["ifTrue:", "alert:", "replace:with:", "match:", "showForms:", "send:", "evaluateExpression:", "new", "isLogged"]}),
 smalltalk.GraphVisualizer);
 
 smalltalk.addMethod(
@@ -195,20 +216,6 @@ password=_st(_st(document)._getElementById_("r_password"))._value();
 _st(self["@socket"])._send_(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st(_st("Register#ChatUser registerUser: (ChatUser new firstname: ").__comma("'")).__comma(name)).__comma("'")).__comma("; lastname: ")).__comma("'")).__comma(surname)).__comma("'")).__comma("; login: ")).__comma("'")).__comma(login)).__comma("'")).__comma("; password: ")).__comma("'")).__comma(password)).__comma("'")).__comma(")"));
 return self}, function($ctx1) {$ctx1.fill(self,"registerUser",{name:name,surname:surname,login:login,password:password},smalltalk.GraphVisualizer)})},
 messageSends: ["value", "getElementById:", "send:", ","]}),
-smalltalk.GraphVisualizer);
-
-smalltalk.addMethod(
-"_resize",
-smalltalk.method({
-selector: "resize",
-fn: function (){
-var self=this;
-var canvas;
-return smalltalk.withContext(function($ctx1) { canvas=_st(document)._getElementById_("viewport");
-_st(canvas)._width_(_st(_st(window)._innerWidth()).__minus((20)));
-_st(canvas)._height_(_st(_st(window)._innerHeight()).__minus((60)));
-return self}, function($ctx1) {$ctx1.fill(self,"resize",{canvas:canvas},smalltalk.GraphVisualizer)})},
-messageSends: ["getElementById:", "width:", "-", "innerWidth", "height:", "innerHeight"]}),
 smalltalk.GraphVisualizer);
 
 smalltalk.addMethod(

@@ -53,7 +53,7 @@ name: aName
 ! !
 
 Object subclass: #GraphVisualizer
-	instanceVariableNames: 'socket'
+	instanceVariableNames: 'socket logged'
 	package: 'Graphs'!
 
 !GraphVisualizer methodsFor: 'not yet classified'!
@@ -62,8 +62,11 @@ init
 	socket := ( GraphConnector new createSocket: [ :evt | self processMessage: ( evt data ) ] ) connection.
 	( document getElementById: 'b_register' ) asJQuery click: [ self registerUser ].
 	( document getElementById: 'b_login' ) asJQuery click: [ self login ].
-	window onload: [ self resize ].
-	window onresize: [ self resize ].
+!
+
+isLogged
+	logged ifNil: [ logged := false ].
+	^logged
 !
 
 login
@@ -74,10 +77,14 @@ login
 !
 
 processMessage: aMessage
+	
 	(aMessage match: 'Service#')  ifTrue: [ window alert: (aMessage replace: 'Service#' with: '') ].
-	(aMessage match: 'Login#')  ifTrue: [ window alert: (aMessage replace: 'Login#' with: ''). self showForms: true. socket send: 'GetUsers#' ].
-	(aMessage match: 'Logout#')  ifTrue: [ window alert: (aMessage replace: 'Logout#' with: ''). self showForms: false ].
-	(aMessage match: 'Node#')  ifTrue: [ Compiler new evaluateExpression:  (aMessage replace: 'Node#' with: '') ].
+	(aMessage match: 'Login#')  ifTrue: [ window alert: (aMessage replace: 'Login#' with: ''). self showForms: true. socket send: 'GetUsers#'. logged := true ].
+	(aMessage match: 'Logout#')  ifTrue: [ window alert: (aMessage replace: 'Logout#' with: ''). self showForms: false. logged := false ].
+	
+	self isLogged ifTrue: [
+				(aMessage match: 'Node#')  ifTrue: [ Compiler new evaluateExpression:  (aMessage replace: 'Node#' with: '') ] .
+].
 !
 
 registerUser
@@ -87,13 +94,6 @@ registerUser
 		login := ( document getElementById: 'r_login' ) value.
 		password := ( document getElementById: 'r_password' ) value.
 		socket send: ( 'Register#ChatUser registerUser: (ChatUser new firstname: ', '''' , name, '''' , '; lastname: ', '''' , surname , '''' , '; login: ', '''' , login, '''' , '; password: ', '''', password, '''' ,')' ) .
-!
-
-resize
-	| canvas |
-	canvas := document getElementById: 'viewport'.
-    canvas width: ( window innerWidth - 20 ).
-    canvas height: ( window innerHeight - 60 )
 !
 
 showForms: aBoolean
