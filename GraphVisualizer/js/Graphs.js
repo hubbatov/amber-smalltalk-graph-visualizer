@@ -25,7 +25,7 @@ selector: "createSocket:",
 category: 'not yet classified',
 fn: function (aBlock){
 var self=this;
-return smalltalk.withContext(function($ctx1) { self["@socket"]=_st((smalltalk.WebSocket || WebSocket))._value_("ws://localhost:9900/broadcast");
+return smalltalk.withContext(function($ctx1) { self["@socket"]=_st((smalltalk.NativeFunction || NativeFunction))._constructor_value_("WebSocket","ws://localhost:9900/broadcast");
 _st(self["@socket"])._onopen_((function(){
 return smalltalk.withContext(function($ctx2) {return _st(window)._alert_("Connection opened");
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
@@ -35,9 +35,9 @@ return smalltalk.withContext(function($ctx2) {return _st(window)._alert_("Conne
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"createSocket:",{aBlock:aBlock},smalltalk.GraphConnector)})},
 args: ["aBlock"],
-source: "createSocket: aBlock\x0a\x09socket := WebSocket  value: 'ws://localhost:9900/broadcast'.\x0a\x09socket onopen: [ window alert: 'Connection opened' ].\x0a\x09socket onmessage: aBlock.\x0a\x09socket onclose: [ window alert: 'Connection closed' ].",
-messageSends: ["value:", "onopen:", "alert:", "onmessage:", "onclose:"],
-referencedClasses: ["WebSocket"]
+source: "createSocket: aBlock\x0a\x09\x09socket := NativeFunction constructor: 'WebSocket' value: 'ws://localhost:9900/broadcast'.\x0a\x09\x09socket onopen: [ window alert: 'Connection opened' ].\x0a\x09\x09socket onmessage: aBlock.\x0a\x09\x09socket onclose: [ window alert: 'Connection closed' ].",
+messageSends: ["constructor:value:", "onopen:", "alert:", "onmessage:", "onclose:"],
+referencedClasses: ["NativeFunction"]
 }),
 smalltalk.GraphConnector);
 

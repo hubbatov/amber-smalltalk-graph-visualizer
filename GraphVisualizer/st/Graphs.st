@@ -10,10 +10,10 @@ connection
 !
 
 createSocket: aBlock
-	socket := WebSocket  value: 'ws://localhost:9900/broadcast'.
-	socket onopen: [ window alert: 'Connection opened' ].
-	socket onmessage: aBlock.
-	socket onclose: [ window alert: 'Connection closed' ].
+		socket := NativeFunction constructor: 'WebSocket' value: 'ws://localhost:9900/broadcast'.
+		socket onopen: [ window alert: 'Connection opened' ].
+		socket onmessage: aBlock.
+		socket onclose: [ window alert: 'Connection closed' ].
 ! !
 
 Object subclass: #GraphEdge

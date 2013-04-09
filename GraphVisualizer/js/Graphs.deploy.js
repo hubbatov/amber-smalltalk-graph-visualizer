@@ -19,7 +19,7 @@ smalltalk.method({
 selector: "createSocket:",
 fn: function (aBlock){
 var self=this;
-return smalltalk.withContext(function($ctx1) { self["@socket"]=_st((smalltalk.WebSocket || WebSocket))._value_("ws://localhost:9900/broadcast");
+return smalltalk.withContext(function($ctx1) { self["@socket"]=_st((smalltalk.NativeFunction || NativeFunction))._constructor_value_("WebSocket","ws://localhost:9900/broadcast");
 _st(self["@socket"])._onopen_((function(){
 return smalltalk.withContext(function($ctx2) {return _st(window)._alert_("Connection opened");
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
@@ -28,7 +28,7 @@ _st(self["@socket"])._onclose_((function(){
 return smalltalk.withContext(function($ctx2) {return _st(window)._alert_("Connection closed");
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"createSocket:",{aBlock:aBlock},smalltalk.GraphConnector)})},
-messageSends: ["value:", "onopen:", "alert:", "onmessage:", "onclose:"]}),
+messageSends: ["constructor:value:", "onopen:", "alert:", "onmessage:", "onclose:"]}),
 smalltalk.GraphConnector);
 
 
