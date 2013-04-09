@@ -41,3 +41,8 @@
     margin: 15px;
     width: 250px;
 }
+#viewport{
+    padding: 0px;
+    margin: -10px;
+    margin-top: 10px;
+}

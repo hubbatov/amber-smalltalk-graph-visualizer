@@ -58,61 +58,12 @@ Object subclass: #GraphVisualizer
 
 !GraphVisualizer methodsFor: 'not yet classified'!
 
-addEdge
-	| nodeB nodeD |
-	nodeB := document getElementById: 'newSrc'.
-	nodeD := document getElementById: 'newDest'.
-	nodeB ifNotNil: [ nodeD ifNotNil: [ self addEdge: (nodeB value) to: (nodeD value) ] ]
-!
-
-addEdge: aSrc to: aDest
-		GraphVisualizer currentEdges add: ( GraphEdge new src: aSrc; dest: aDest ).
-		self draw
-!
-
-addNode
-	| node |
-	node := document getElementById: 'newNodeName'.
-	node ifNotNil: [ self addNode: ( node value ) ]
-!
-
-addNode: aNode
-	GraphVisualizer currentNodes add: (GraphNode new name: aNode) .
-	self draw
-!
-
-addOption: opText toList: aList
-	| op |
-	aList ifNotNil: [
-	op := document createElement: 'option'.
-	op appendChild: ( document createTextNode: opText ) .
-	aList appendChild: op] .
-!
-
-clearOptions: aList
-	"1 to: (aList length) do: [ (aList length ) > 0 ifTrue: [ aList options remove ]  ]"
-!
-
-draw
-		| nodeB nodeE |
-
-		nodeB := document getElementById: 'newSrc' .
-		nodeE := document getElementById: 'newDest' .
-		
-		self clearOptions: nodeB.
-		self clearOptions: nodeE.
-		
-		 (GraphVisualizer currentNodes ) do: [ :node | sys addNode: ( node name ). 
-											             self addOption: ( node name ) toList: nodeB.
-														 self addOption: ( node name ) toList: nodeE.	
-										   ].
-		( GraphVisualizer currentEdges ) do: [ :edge |  sys addEdge: ( edge src ) and: ( edge dest ) ]
-!
-
 init
 	socket := ( GraphConnector new createSocket: [ :evt | self processMessage: ( evt data ) ] ) connection.
 	( document getElementById: 'b_register' ) asJQuery click: [ self registerUser ].
-	( document getElementById: 'b_login' ) asJQuery click: [ self login ]
+	( document getElementById: 'b_login' ) asJQuery click: [ self login ].
+	window onload: [ self resize ].
+	window onresize: [ self resize ].
 !
 
 login
@@ -124,6 +75,9 @@ login
 
 processMessage: aMessage
 	(aMessage match: 'Service#')  ifTrue: [ window alert: (aMessage replace: 'Service#' with: '') ].
+	(aMessage match: 'Login#')  ifTrue: [ window alert: (aMessage replace: 'Login#' with: ''). self showForms: true. socket send: 'GetUsers#' ].
+	(aMessage match: 'Logout#')  ifTrue: [ window alert: (aMessage replace: 'Logout#' with: ''). self showForms: false ].
+	(aMessage match: 'Node#')  ifTrue: [ Compiler new evaluateExpression:  (aMessage replace: 'Node#' with: '') ].
 !
 
 registerUser
@@ -133,11 +87,33 @@ registerUser
 		login := ( document getElementById: 'r_login' ) value.
 		password := ( document getElementById: 'r_password' ) value.
 		socket send: ( 'Register#ChatUser registerUser: (ChatUser new firstname: ', '''' , name, '''' , '; lastname: ', '''' , surname , '''' , '; login: ', '''' , login, '''' , '; password: ', '''', password, '''' ,')' ) .
+!
+
+resize
+	| canvas |
+	canvas := document getElementById: 'viewport'.
+    canvas width: ( window innerWidth - 20 ).
+    canvas height: ( window innerHeight - 60 )
+!
+
+showForms: aBoolean
+	( document getElementById: 'registrationDiv' ) hidden: aBoolean.
+	( document getElementById: 'loginDiv' ) hidden: aBoolean.
 ! !
 
 GraphVisualizer class instanceVariableNames: 'nodes edges'!
 
 !GraphVisualizer class methodsFor: 'not yet classified'!
+
+addEdge: aSrc to: aDest
+		GraphVisualizer currentEdges add: ( GraphEdge new src: aSrc; dest: aDest ).
+		self draw
+!
+
+addNode: aNode
+	GraphVisualizer currentNodes add: (GraphNode new name: aNode) .
+	self draw
+!
 
 currentEdges
 	edges ifNil: [ edges := Array new ] .
@@ -155,5 +131,10 @@ currentNodes
 
 currentNodes: aArray
 	aArray do: [ :each | self currentNodes add: (GraphNode new name: (each name)) ].
+!
+
+draw
+		( GraphVisualizer currentNodes ) do: [ :node | sys addNode: ( node name ) ].
+		( GraphVisualizer currentEdges ) do: [ :edge |  sys addEdge: ( edge src ) and: ( edge dest ) ]
 ! !
 

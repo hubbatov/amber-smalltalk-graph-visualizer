@@ -1,3 +1,15 @@
+window.onload = function() {
+	resize_canvas();
+}
+window.onresize = function(event) {
+	resize_canvas();
+}
+function resize_canvas(){
+    canvas = document.getElementById("viewport");
+    canvas.width  = window.innerWidth - 20;
+    canvas.height = window.innerHeight - 30;
+}
+
 (function($){
 	var Renderer = function(canvas)
 	{
@@ -9,11 +21,12 @@
 			init:function(system){
 				//начальная инициализация
 				particleSystem = system;
+				resize_canvas();
 				particleSystem.screenSize(canvas.width, canvas.height); 
 				particleSystem.screenPadding(80);
 				that.initMouseHandling();
 			},
-      
+
 			redraw:function(){
 				//действия при перересовке
 				ctx.fillStyle = "white";	//белым цветом

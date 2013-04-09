@@ -153,167 +153,6 @@ smalltalk.GraphNode);
 
 smalltalk.addClass('GraphVisualizer', smalltalk.Object, ['socket'], 'Graphs');
 smalltalk.addMethod(
-"_addEdge",
-smalltalk.method({
-selector: "addEdge",
-category: 'not yet classified',
-fn: function (){
-var self=this;
-var nodeB,nodeD;
-return smalltalk.withContext(function($ctx1) { var $1,$2;
-nodeB=_st(document)._getElementById_("newSrc");
-nodeD=_st(document)._getElementById_("newDest");
-$1=nodeB;
-if(($receiver = $1) == nil || $receiver == undefined){
-$1;
-} else {
-$2=nodeD;
-if(($receiver = $2) == nil || $receiver == undefined){
-$2;
-} else {
-_st(self)._addEdge_to_(_st(nodeB)._value(),_st(nodeD)._value());
-};
-};
-return self}, function($ctx1) {$ctx1.fill(self,"addEdge",{nodeB:nodeB,nodeD:nodeD},smalltalk.GraphVisualizer)})},
-args: [],
-source: "addEdge\x0a\x09| nodeB nodeD |\x0a\x09nodeB := document getElementById: 'newSrc'.\x0a\x09nodeD := document getElementById: 'newDest'.\x0a\x09nodeB ifNotNil: [ nodeD ifNotNil: [ self addEdge: (nodeB value) to: (nodeD value) ] ] \x0a\x09\x0a",
-messageSends: ["getElementById:", "ifNotNil:", "addEdge:to:", "value"],
-referencedClasses: []
-}),
-smalltalk.GraphVisualizer);
-
-smalltalk.addMethod(
-"_addEdge_to_",
-smalltalk.method({
-selector: "addEdge:to:",
-category: 'not yet classified',
-fn: function (aSrc,aDest){
-var self=this;
-return smalltalk.withContext(function($ctx1) { var $1,$2;
-$1=_st((smalltalk.GraphEdge || GraphEdge))._new();
-_st($1)._src_(aSrc);
-$2=_st($1)._dest_(aDest);
-_st(_st((smalltalk.GraphVisualizer || GraphVisualizer))._currentEdges())._add_($2);
-_st(self)._draw();
-return self}, function($ctx1) {$ctx1.fill(self,"addEdge:to:",{aSrc:aSrc,aDest:aDest},smalltalk.GraphVisualizer)})},
-args: ["aSrc", "aDest"],
-source: "addEdge: aSrc to: aDest\x0a\x09\x09GraphVisualizer currentEdges add: ( GraphEdge new src: aSrc; dest: aDest ).\x0a\x09\x09self draw\x0a\x09\x0a\x09\x0a",
-messageSends: ["add:", "src:", "new", "dest:", "currentEdges", "draw"],
-referencedClasses: ["GraphEdge", "GraphVisualizer"]
-}),
-smalltalk.GraphVisualizer);
-
-smalltalk.addMethod(
-"_addNode",
-smalltalk.method({
-selector: "addNode",
-category: 'not yet classified',
-fn: function (){
-var self=this;
-var node;
-return smalltalk.withContext(function($ctx1) { var $1;
-node=_st(document)._getElementById_("newNodeName");
-$1=node;
-if(($receiver = $1) == nil || $receiver == undefined){
-$1;
-} else {
-_st(self)._addNode_(_st(node)._value());
-};
-return self}, function($ctx1) {$ctx1.fill(self,"addNode",{node:node},smalltalk.GraphVisualizer)})},
-args: [],
-source: "addNode\x0a\x09| node |\x0a\x09node := document getElementById: 'newNodeName'.\x0a\x09node ifNotNil: [ self addNode: ( node value ) ]",
-messageSends: ["getElementById:", "ifNotNil:", "addNode:", "value"],
-referencedClasses: []
-}),
-smalltalk.GraphVisualizer);
-
-smalltalk.addMethod(
-"_addNode_",
-smalltalk.method({
-selector: "addNode:",
-category: 'not yet classified',
-fn: function (aNode){
-var self=this;
-return smalltalk.withContext(function($ctx1) { _st(_st((smalltalk.GraphVisualizer || GraphVisualizer))._currentNodes())._add_(_st(_st((smalltalk.GraphNode || GraphNode))._new())._name_(aNode));
-_st(self)._draw();
-return self}, function($ctx1) {$ctx1.fill(self,"addNode:",{aNode:aNode},smalltalk.GraphVisualizer)})},
-args: ["aNode"],
-source: "addNode: aNode\x0a\x09GraphVisualizer currentNodes add: (GraphNode new name: aNode) .\x0a\x09self draw",
-messageSends: ["add:", "name:", "new", "currentNodes", "draw"],
-referencedClasses: ["GraphNode", "GraphVisualizer"]
-}),
-smalltalk.GraphVisualizer);
-
-smalltalk.addMethod(
-"_addOption_toList_",
-smalltalk.method({
-selector: "addOption:toList:",
-category: 'not yet classified',
-fn: function (opText,aList){
-var self=this;
-var op;
-return smalltalk.withContext(function($ctx1) { var $1;
-$1=aList;
-if(($receiver = $1) == nil || $receiver == undefined){
-$1;
-} else {
-op=_st(document)._createElement_("option");
-op;
-_st(op)._appendChild_(_st(document)._createTextNode_(opText));
-_st(aList)._appendChild_(op);
-};
-return self}, function($ctx1) {$ctx1.fill(self,"addOption:toList:",{opText:opText,aList:aList,op:op},smalltalk.GraphVisualizer)})},
-args: ["opText", "aList"],
-source: "addOption: opText toList: aList\x0a\x09| op |\x0a\x09aList ifNotNil: [\x0a\x09op := document createElement: 'option'.\x0a\x09op appendChild: ( document createTextNode: opText ) .\x0a\x09aList appendChild: op] .",
-messageSends: ["ifNotNil:", "createElement:", "appendChild:", "createTextNode:"],
-referencedClasses: []
-}),
-smalltalk.GraphVisualizer);
-
-smalltalk.addMethod(
-"_clearOptions_",
-smalltalk.method({
-selector: "clearOptions:",
-category: 'not yet classified',
-fn: function (aList){
-var self=this;
-return smalltalk.withContext(function($ctx1) { return self}, function($ctx1) {$ctx1.fill(self,"clearOptions:",{aList:aList},smalltalk.GraphVisualizer)})},
-args: ["aList"],
-source: "clearOptions: aList\x0a\x09\x221 to: (aList length) do: [ (aList length ) > 0 ifTrue: [ aList options remove ]  ]\x22\x0a\x09",
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.GraphVisualizer);
-
-smalltalk.addMethod(
-"_draw",
-smalltalk.method({
-selector: "draw",
-category: 'not yet classified',
-fn: function (){
-var self=this;
-var nodeB,nodeE;
-return smalltalk.withContext(function($ctx1) { nodeB=_st(document)._getElementById_("newSrc");
-nodeE=_st(document)._getElementById_("newDest");
-_st(self)._clearOptions_(nodeB);
-_st(self)._clearOptions_(nodeE);
-_st(_st((smalltalk.GraphVisualizer || GraphVisualizer))._currentNodes())._do_((function(node){
-return smalltalk.withContext(function($ctx2) {_st(sys)._addNode_(_st(node)._name());
-_st(self)._addOption_toList_(_st(node)._name(),nodeB);
-return _st(self)._addOption_toList_(_st(node)._name(),nodeE);
-}, function($ctx2) {$ctx2.fillBlock({node:node},$ctx1)})}));
-_st(_st((smalltalk.GraphVisualizer || GraphVisualizer))._currentEdges())._do_((function(edge){
-return smalltalk.withContext(function($ctx2) {return _st(sys)._addEdge_and_(_st(edge)._src(),_st(edge)._dest());
-}, function($ctx2) {$ctx2.fillBlock({edge:edge},$ctx1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"draw",{nodeB:nodeB,nodeE:nodeE},smalltalk.GraphVisualizer)})},
-args: [],
-source: "draw\x0a\x09\x09| nodeB nodeE |\x0a\x0a\x09\x09nodeB := document getElementById: 'newSrc' .\x0a\x09\x09nodeE := document getElementById: 'newDest' .\x0a\x09\x09\x0a\x09\x09self clearOptions: nodeB.\x0a\x09\x09self clearOptions: nodeE.\x0a\x09\x09\x0a\x09\x09 (GraphVisualizer currentNodes ) do: [ :node | sys addNode: ( node name ). \x0a\x09\x09\x09\x09\x09\x09\x09\x09\x09\x09\x09             self addOption: ( node name ) toList: nodeB.\x0a\x09\x09\x09\x09\x09\x09\x09\x09\x09\x09\x09\x09\x09\x09 self addOption: ( node name ) toList: nodeE.\x09\x0a\x09\x09\x09\x09\x09\x09\x09\x09\x09\x09   ].\x0a\x09\x09( GraphVisualizer currentEdges ) do: [ :edge |  sys addEdge: ( edge src ) and: ( edge dest ) ]",
-messageSends: ["getElementById:", "clearOptions:", "do:", "addNode:", "name", "addOption:toList:", "currentNodes", "addEdge:and:", "src", "dest", "currentEdges"],
-referencedClasses: ["GraphVisualizer"]
-}),
-smalltalk.GraphVisualizer);
-
-smalltalk.addMethod(
 "_init",
 smalltalk.method({
 selector: "init",
@@ -329,10 +168,16 @@ return smalltalk.withContext(function($ctx2) {return _st(self)._registerUser();
 _st(_st(_st(document)._getElementById_("b_login"))._asJQuery())._click_((function(){
 return smalltalk.withContext(function($ctx2) {return _st(self)._login();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st(window)._onload_((function(){
+return smalltalk.withContext(function($ctx2) {return _st(self)._resize();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st(window)._onresize_((function(){
+return smalltalk.withContext(function($ctx2) {return _st(self)._resize();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"init",{},smalltalk.GraphVisualizer)})},
 args: [],
-source: "init\x0a\x09socket := ( GraphConnector new createSocket: [ :evt | self processMessage: ( evt data ) ] ) connection.\x0a\x09( document getElementById: 'b_register' ) asJQuery click: [ self registerUser ].\x0a\x09( document getElementById: 'b_login' ) asJQuery click: [ self login ]",
-messageSends: ["connection", "createSocket:", "processMessage:", "data", "new", "click:", "registerUser", "asJQuery", "getElementById:", "login"],
+source: "init\x0a\x09socket := ( GraphConnector new createSocket: [ :evt | self processMessage: ( evt data ) ] ) connection.\x0a\x09( document getElementById: 'b_register' ) asJQuery click: [ self registerUser ].\x0a\x09( document getElementById: 'b_login' ) asJQuery click: [ self login ].\x0a\x09window onload: [ self resize ].\x0a\x09window onresize: [ self resize ].",
+messageSends: ["connection", "createSocket:", "processMessage:", "data", "new", "click:", "registerUser", "asJQuery", "getElementById:", "login", "onload:", "resize", "onresize:"],
 referencedClasses: ["GraphConnector"]
 }),
 smalltalk.GraphVisualizer);
@@ -363,16 +208,31 @@ selector: "processMessage:",
 category: 'not yet classified',
 fn: function (aMessage){
 var self=this;
-return smalltalk.withContext(function($ctx1) { var $1;
+return smalltalk.withContext(function($ctx1) { var $1,$2,$3,$4;
 $1=_st(aMessage)._match_("Service#");
 if(smalltalk.assert($1)){
 _st(window)._alert_(_st(aMessage)._replace_with_("Service#",""));
 };
+$2=_st(aMessage)._match_("Login#");
+if(smalltalk.assert($2)){
+_st(window)._alert_(_st(aMessage)._replace_with_("Login#",""));
+_st(self)._showForms_(true);
+_st(self["@socket"])._send_("GetUsers#");
+};
+$3=_st(aMessage)._match_("Logout#");
+if(smalltalk.assert($3)){
+_st(window)._alert_(_st(aMessage)._replace_with_("Logout#",""));
+_st(self)._showForms_(false);
+};
+$4=_st(aMessage)._match_("Node#");
+if(smalltalk.assert($4)){
+_st(_st((smalltalk.Compiler || Compiler))._new())._evaluateExpression_(_st(aMessage)._replace_with_("Node#",""));
+};
 return self}, function($ctx1) {$ctx1.fill(self,"processMessage:",{aMessage:aMessage},smalltalk.GraphVisualizer)})},
 args: ["aMessage"],
-source: "processMessage: aMessage\x0a\x09(aMessage match: 'Service#')  ifTrue: [ window alert: (aMessage replace: 'Service#' with: '') ].",
-messageSends: ["ifTrue:", "alert:", "replace:with:", "match:"],
-referencedClasses: []
+source: "processMessage: aMessage\x0a\x09(aMessage match: 'Service#')  ifTrue: [ window alert: (aMessage replace: 'Service#' with: '') ].\x0a\x09(aMessage match: 'Login#')  ifTrue: [ window alert: (aMessage replace: 'Login#' with: ''). self showForms: true. socket send: 'GetUsers#' ].\x0a\x09(aMessage match: 'Logout#')  ifTrue: [ window alert: (aMessage replace: 'Logout#' with: ''). self showForms: false ].\x0a\x09(aMessage match: 'Node#')  ifTrue: [ Compiler new evaluateExpression:  (aMessage replace: 'Node#' with: '') ].\x0a\x09",
+messageSends: ["ifTrue:", "alert:", "replace:with:", "match:", "showForms:", "send:", "evaluateExpression:", "new"],
+referencedClasses: ["Compiler"]
 }),
 smalltalk.GraphVisualizer);
 
@@ -397,8 +257,82 @@ referencedClasses: []
 }),
 smalltalk.GraphVisualizer);
 
+smalltalk.addMethod(
+"_resize",
+smalltalk.method({
+selector: "resize",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+var canvas;
+return smalltalk.withContext(function($ctx1) { canvas=_st(document)._getElementById_("viewport");
+_st(canvas)._width_(_st(_st(window)._innerWidth()).__minus((20)));
+_st(canvas)._height_(_st(_st(window)._innerHeight()).__minus((60)));
+return self}, function($ctx1) {$ctx1.fill(self,"resize",{canvas:canvas},smalltalk.GraphVisualizer)})},
+args: [],
+source: "resize\x0a\x09| canvas |\x0a\x09canvas := document getElementById: 'viewport'.\x0a    canvas width: ( window innerWidth - 20 ).\x0a    canvas height: ( window innerHeight - 60 )",
+messageSends: ["getElementById:", "width:", "-", "innerWidth", "height:", "innerHeight"],
+referencedClasses: []
+}),
+smalltalk.GraphVisualizer);
+
+smalltalk.addMethod(
+"_showForms_",
+smalltalk.method({
+selector: "showForms:",
+category: 'not yet classified',
+fn: function (aBoolean){
+var self=this;
+return smalltalk.withContext(function($ctx1) { _st(_st(document)._getElementById_("registrationDiv"))._hidden_(aBoolean);
+_st(_st(document)._getElementById_("loginDiv"))._hidden_(aBoolean);
+return self}, function($ctx1) {$ctx1.fill(self,"showForms:",{aBoolean:aBoolean},smalltalk.GraphVisualizer)})},
+args: ["aBoolean"],
+source: "showForms: aBoolean\x0a\x09( document getElementById: 'registrationDiv' ) hidden: aBoolean.\x0a\x09( document getElementById: 'loginDiv' ) hidden: aBoolean.",
+messageSends: ["hidden:", "getElementById:"],
+referencedClasses: []
+}),
+smalltalk.GraphVisualizer);
+
 
 smalltalk.GraphVisualizer.klass.iVarNames = ['nodes','edges'];
+smalltalk.addMethod(
+"_addEdge_to_",
+smalltalk.method({
+selector: "addEdge:to:",
+category: 'not yet classified',
+fn: function (aSrc,aDest){
+var self=this;
+return smalltalk.withContext(function($ctx1) { var $1,$2;
+$1=_st((smalltalk.GraphEdge || GraphEdge))._new();
+_st($1)._src_(aSrc);
+$2=_st($1)._dest_(aDest);
+_st(_st((smalltalk.GraphVisualizer || GraphVisualizer))._currentEdges())._add_($2);
+_st(self)._draw();
+return self}, function($ctx1) {$ctx1.fill(self,"addEdge:to:",{aSrc:aSrc,aDest:aDest},smalltalk.GraphVisualizer.klass)})},
+args: ["aSrc", "aDest"],
+source: "addEdge: aSrc to: aDest\x0a\x09\x09GraphVisualizer currentEdges add: ( GraphEdge new src: aSrc; dest: aDest ).\x0a\x09\x09self draw",
+messageSends: ["add:", "src:", "new", "dest:", "currentEdges", "draw"],
+referencedClasses: ["GraphEdge", "GraphVisualizer"]
+}),
+smalltalk.GraphVisualizer.klass);
+
+smalltalk.addMethod(
+"_addNode_",
+smalltalk.method({
+selector: "addNode:",
+category: 'not yet classified',
+fn: function (aNode){
+var self=this;
+return smalltalk.withContext(function($ctx1) { _st(_st((smalltalk.GraphVisualizer || GraphVisualizer))._currentNodes())._add_(_st(_st((smalltalk.GraphNode || GraphNode))._new())._name_(aNode));
+_st(self)._draw();
+return self}, function($ctx1) {$ctx1.fill(self,"addNode:",{aNode:aNode},smalltalk.GraphVisualizer.klass)})},
+args: ["aNode"],
+source: "addNode: aNode\x0a\x09GraphVisualizer currentNodes add: (GraphNode new name: aNode) .\x0a\x09self draw",
+messageSends: ["add:", "name:", "new", "currentNodes", "draw"],
+referencedClasses: ["GraphNode", "GraphVisualizer"]
+}),
+smalltalk.GraphVisualizer.klass);
+
 smalltalk.addMethod(
 "_currentEdges",
 smalltalk.method({
@@ -486,6 +420,27 @@ args: ["aArray"],
 source: "currentNodes: aArray\x0a\x09aArray do: [ :each | self currentNodes add: (GraphNode new name: (each name)) ].",
 messageSends: ["do:", "add:", "name:", "name", "new", "currentNodes"],
 referencedClasses: ["GraphNode"]
+}),
+smalltalk.GraphVisualizer.klass);
+
+smalltalk.addMethod(
+"_draw",
+smalltalk.method({
+selector: "draw",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { _st(_st((smalltalk.GraphVisualizer || GraphVisualizer))._currentNodes())._do_((function(node){
+return smalltalk.withContext(function($ctx2) {return _st(sys)._addNode_(_st(node)._name());
+}, function($ctx2) {$ctx2.fillBlock({node:node},$ctx1)})}));
+_st(_st((smalltalk.GraphVisualizer || GraphVisualizer))._currentEdges())._do_((function(edge){
+return smalltalk.withContext(function($ctx2) {return _st(sys)._addEdge_and_(_st(edge)._src(),_st(edge)._dest());
+}, function($ctx2) {$ctx2.fillBlock({edge:edge},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"draw",{},smalltalk.GraphVisualizer.klass)})},
+args: [],
+source: "draw\x0a\x09\x09( GraphVisualizer currentNodes ) do: [ :node | sys addNode: ( node name ) ].\x0a\x09\x09( GraphVisualizer currentEdges ) do: [ :edge |  sys addEdge: ( edge src ) and: ( edge dest ) ]",
+messageSends: ["do:", "addNode:", "name", "currentNodes", "addEdge:and:", "src", "dest", "currentEdges"],
+referencedClasses: ["GraphVisualizer"]
 }),
 smalltalk.GraphVisualizer.klass);
 
