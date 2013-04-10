@@ -1,28 +1,4 @@
 smalltalk.addPackage('Graphs');
-smalltalk.addClass('GraphCanvas', smalltalk.Object, ['canvas', 'context', 'particalSystem'], 'Graphs');
-smalltalk.addMethod(
-"_init_",
-smalltalk.method({
-selector: "init:",
-fn: function (aCanvas){
-var self=this;
-var that;
-return smalltalk.withContext(function($ctx1) { var $1;
-self["@canvas"]=_st(_st(_st("#").__comma(aCanvas))._asJQuery())._at_((0));
-self["@context"]=_st(self["@canvas"])._getContext_("2d");
-_st(that).__eq(smalltalk.HashedCollection._fromPairs_([_st("init").__minus_gt((function(system){
-return smalltalk.withContext(function($ctx2) {return _st(self)._initialize_(system);
-}, function($ctx2) {$ctx2.fillBlock({system:system},$ctx1)})})),_st("redraw").__minus_gt((function(){
-return smalltalk.withContext(function($ctx2) {}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})})),_st("initMouseHandling").__minus_gt((function(){
-return smalltalk.withContext(function($ctx2) {}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}))]));
-$1=that;
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"init:",{aCanvas:aCanvas,that:that},smalltalk.GraphCanvas)})},
-messageSends: ["at:", "asJQuery", ",", "getContext:", "=", "->", "initialize:"]}),
-smalltalk.GraphCanvas);
-
-
-
 smalltalk.addClass('GraphConnector', smalltalk.Object, ['socket'], 'Graphs');
 smalltalk.addMethod(
 "_connection",
@@ -108,6 +84,156 @@ smalltalk.GraphEdge);
 
 
 
+smalltalk.addClass('GraphMouseHandler', smalltalk.Object, ['dragged', 'handler', 'renderer'], 'Graphs');
+smalltalk.addMethod(
+"_clicked_",
+smalltalk.method({
+selector: "clicked:",
+fn: function (event){
+var self=this;
+var mousePosition;
+return smalltalk.withContext(function($ctx1) { var $1;
+mousePosition=_st(self)._getMousePositionForEvent_(event);
+self["@dragged"]=_st(_st(self["@renderer"])._particleSystem())._nearest_(mousePosition);
+$1=_st(self)._draggedNotNil();
+if(smalltalk.assert($1)){
+_st(_st(self["@dragged"])._node())._fixed_(true);
+};
+_st(_st(_st(self["@renderer"])._canvas())._asJQuery())._bind_do_("mousemove",_st(self["@handler"])._at_("dragged"));
+_st(_st(window)._asJQuery())._bind_do_("mouseup",_st(self["@handler"])._at_("dropped"));
+return false;
+}, function($ctx1) {$ctx1.fill(self,"clicked:",{event:event,mousePosition:mousePosition},smalltalk.GraphMouseHandler)})},
+messageSends: ["getMousePositionForEvent:", "nearest:", "particleSystem", "ifTrue:", "fixed:", "node", "draggedNotNil", "bind:do:", "at:", "asJQuery", "canvas"]}),
+smalltalk.GraphMouseHandler);
+
+smalltalk.addMethod(
+"_createHandler",
+smalltalk.method({
+selector: "createHandler",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { self["@handler"]=smalltalk.HashedCollection._fromPairs_([_st("clicked").__minus_gt((function(event){
+return smalltalk.withContext(function($ctx2) {return _st(self)._clicked_(event);
+}, function($ctx2) {$ctx2.fillBlock({event:event},$ctx1)})})),_st("dragged").__minus_gt((function(event){
+return smalltalk.withContext(function($ctx2) {return _st(self)._dragged_(event);
+}, function($ctx2) {$ctx2.fillBlock({event:event},$ctx1)})})),_st("dropped").__minus_gt((function(event){
+return smalltalk.withContext(function($ctx2) {return _st(self)._dropped_(event);
+}, function($ctx2) {$ctx2.fillBlock({event:event},$ctx1)})}))]);
+return self}, function($ctx1) {$ctx1.fill(self,"createHandler",{},smalltalk.GraphMouseHandler)})},
+messageSends: ["->", "clicked:", "dragged:", "dropped:"]}),
+smalltalk.GraphMouseHandler);
+
+smalltalk.addMethod(
+"_dragged_",
+smalltalk.method({
+selector: "dragged:",
+fn: function (event){
+var self=this;
+var mousePosition;
+return smalltalk.withContext(function($ctx1) { var $1;
+mousePosition=_st(self)._getMousePositionForEvent_(event);
+$1=_st(self)._draggedNotNil();
+if(smalltalk.assert($1)){
+p=_st(_st(self["@renderer"])._particleSystem())._fromScreen_(mousePosition);
+p;
+_st(_st(self["@dragged"])._node())._p_(p);
+};
+return false;
+}, function($ctx1) {$ctx1.fill(self,"dragged:",{event:event,mousePosition:mousePosition},smalltalk.GraphMouseHandler)})},
+messageSends: ["getMousePositionForEvent:", "ifTrue:", "fromScreen:", "particleSystem", "p:", "node", "draggedNotNil"]}),
+smalltalk.GraphMouseHandler);
+
+smalltalk.addMethod(
+"_draggedNotNil",
+smalltalk.method({
+selector: "draggedNotNil",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { var $1;
+$1=_st(_st(self["@dragged"])._notNil())._and_((function(){
+return smalltalk.withContext(function($ctx2) {return _st(_st(self["@dragged"])._node())._notNil();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"draggedNotNil",{},smalltalk.GraphMouseHandler)})},
+messageSends: ["and:", "notNil", "node"]}),
+smalltalk.GraphMouseHandler);
+
+smalltalk.addMethod(
+"_dropped_",
+smalltalk.method({
+selector: "dropped:",
+fn: function (event){
+var self=this;
+return smalltalk.withContext(function($ctx1) { var $1,$2;
+$1=_st(self)._draggedNotNil();
+if(! smalltalk.assert($1)){
+$2=self;
+return $2;
+};
+_st(_st(self["@dragged"])._node())._fixed_(false);
+self["@dragged"]=nil;
+_st(_st(_st(self["@renderer"])._canvas())._asJQuery())._unbind_do_("mousemove",_st(self["@handler"])._at_("dragged"));
+_st(_st(window)._asJQuery())._unbind_do_("mouseup",_st(self["@handler"])._at_("dropped"));
+return false;
+}, function($ctx1) {$ctx1.fill(self,"dropped:",{event:event},smalltalk.GraphMouseHandler)})},
+messageSends: ["ifFalse:", "draggedNotNil", "fixed:", "node", "unbind:do:", "at:", "asJQuery", "canvas"]}),
+smalltalk.GraphMouseHandler);
+
+smalltalk.addMethod(
+"_getMousePositionForEvent_",
+smalltalk.method({
+selector: "getMousePositionForEvent:",
+fn: function (event){
+var self=this;
+var pos,mousePosition;
+return smalltalk.withContext(function($ctx1) { pos=_st(_st(_st(self["@renderer"])._canvas())._asJQuery())._offset();
+mousePosition=_st(arbor)._Point_y_(_st(_st(event)._pageX()).__minus(_st(pos)._left()),_st(_st(event)._pageY()).__minus(_st(pos)._top()));
+return self}, function($ctx1) {$ctx1.fill(self,"getMousePositionForEvent:",{event:event,pos:pos,mousePosition:mousePosition},smalltalk.GraphMouseHandler)})},
+messageSends: ["offset", "asJQuery", "canvas", "Point:y:", "-", "left", "pageX", "top", "pageY"]}),
+smalltalk.GraphMouseHandler);
+
+smalltalk.addMethod(
+"_initialize",
+smalltalk.method({
+selector: "initialize",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { smalltalk.Object.fn.prototype._initialize.apply(_st(self), []);
+_st(self)._createHandler();
+return self}, function($ctx1) {$ctx1.fill(self,"initialize",{},smalltalk.GraphMouseHandler)})},
+messageSends: ["initialize", "createHandler"]}),
+smalltalk.GraphMouseHandler);
+
+smalltalk.addMethod(
+"_setRenderer_",
+smalltalk.method({
+selector: "setRenderer:",
+fn: function (aRenderer){
+var self=this;
+return smalltalk.withContext(function($ctx1) { self["@renderer"]=aRenderer;
+_st(_st(_st(self["@renderer"])._canvas())._asJQuery())._mousedown_(_st(self["@handler"])._at_("clicked"));
+return self}, function($ctx1) {$ctx1.fill(self,"setRenderer:",{aRenderer:aRenderer},smalltalk.GraphMouseHandler)})},
+messageSends: ["mousedown:", "at:", "asJQuery", "canvas"]}),
+smalltalk.GraphMouseHandler);
+
+
+smalltalk.addMethod(
+"_newForRenderer_",
+smalltalk.method({
+selector: "newForRenderer:",
+fn: function (aRenderer){
+var self=this;
+return smalltalk.withContext(function($ctx1) { var $2,$3,$1;
+$2=_st(self)._new();
+_st($2)._setRenderer_(aRenderer);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"newForRenderer:",{aRenderer:aRenderer},smalltalk.GraphMouseHandler.klass)})},
+messageSends: ["setRenderer:", "new", "yourself"]}),
+smalltalk.GraphMouseHandler.klass);
+
+
 smalltalk.addClass('GraphNode', smalltalk.Object, ['name'], 'Graphs');
 smalltalk.addMethod(
 "_name",
@@ -135,6 +261,163 @@ smalltalk.GraphNode);
 
 
 
+smalltalk.addClass('GraphRenderer', smalltalk.Object, ['canvas', 'ctx', 'particleSystem', 'mouseHandler'], 'Graphs');
+smalltalk.addMethod(
+"_canvas",
+smalltalk.method({
+selector: "canvas",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { var $1;
+$1=self["@canvas"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"canvas",{},smalltalk.GraphRenderer)})},
+messageSends: []}),
+smalltalk.GraphRenderer);
+
+smalltalk.addMethod(
+"_drawLineFrom_to_",
+smalltalk.method({
+selector: "drawLineFrom:to:",
+fn: function (pt1,pt2){
+var self=this;
+return smalltalk.withContext(function($ctx1) { var $1,$2;
+$1=self["@ctx"];
+_st($1)._strokeStyle_("rgba(0,0,0, .333)");
+_st($1)._lineWidth_((1));
+_st($1)._beginPath();
+_st($1)._moveTo_y_(_st(pt1)._x(),_st(pt1)._y());
+_st($1)._lineTo_y_(_st(pt2)._x(),_st(pt2)._y());
+$2=_st($1)._stroke();
+return self}, function($ctx1) {$ctx1.fill(self,"drawLineFrom:to:",{pt1:pt1,pt2:pt2},smalltalk.GraphRenderer)})},
+messageSends: ["strokeStyle:", "lineWidth:", "beginPath", "moveTo:y:", "x", "y", "lineTo:y:", "stroke"]}),
+smalltalk.GraphRenderer);
+
+smalltalk.addMethod(
+"_drawPoint_forNode_",
+smalltalk.method({
+selector: "drawPoint:forNode:",
+fn: function (pt,node){
+var self=this;
+var w;
+return smalltalk.withContext(function($ctx1) { var $1,$2;
+w=(10);
+$1=self["@ctx"];
+_st($1)._fillStyle_("orange");
+_st($1)._fillRect_y_width_height_(_st(_st(pt)._x()).__minus(_st(w).__slash((2))),_st(_st(pt)._y()).__minus(_st(w).__slash((2))),w,w);
+_st($1)._fillStyle_("black");
+_st($1)._font_("italic 13px sans-serif");
+$2=_st($1)._fillText_x_y_(_st(node)._name(),_st(_st(pt)._x()).__plus((8)),_st(_st(pt)._y()).__plus((8)));
+return self}, function($ctx1) {$ctx1.fill(self,"drawPoint:forNode:",{pt:pt,node:node,w:w},smalltalk.GraphRenderer)})},
+messageSends: ["fillStyle:", "fillRect:y:width:height:", "-", "/", "x", "y", "font:", "fillText:x:y:", "name", "+"]}),
+smalltalk.GraphRenderer);
+
+smalltalk.addMethod(
+"_initializeMouseHandling",
+smalltalk.method({
+selector: "initializeMouseHandling",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { return self}, function($ctx1) {$ctx1.fill(self,"initializeMouseHandling",{},smalltalk.GraphRenderer)})},
+messageSends: []}),
+smalltalk.GraphRenderer);
+
+smalltalk.addMethod(
+"_initializeWithSystem_",
+smalltalk.method({
+selector: "initializeWithSystem:",
+fn: function (aSystem){
+var self=this;
+return smalltalk.withContext(function($ctx1) { var $1,$2;
+self["@particleSystem"]=aSystem;
+$1=self["@particleSystem"];
+_st($1)._screenSize_height_(_st(self["@canvas"])._width(),_st(self["@canvas"])._height());
+$2=_st($1)._screenPadding_((80));
+_st(self)._initializeMouseHandling();
+return self}, function($ctx1) {$ctx1.fill(self,"initializeWithSystem:",{aSystem:aSystem},smalltalk.GraphRenderer)})},
+messageSends: ["screenSize:height:", "width", "height", "screenPadding:", "initializeMouseHandling"]}),
+smalltalk.GraphRenderer);
+
+smalltalk.addMethod(
+"_jsInterface",
+smalltalk.method({
+selector: "jsInterface",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { var $1;
+$1=smalltalk.HashedCollection._fromPairs_([_st("init").__minus_gt((function(system){
+return smalltalk.withContext(function($ctx2) {return _st(self)._initializeWithSystem_(system);
+}, function($ctx2) {$ctx2.fillBlock({system:system},$ctx1)})})),_st("redraw").__minus_gt((function(){
+return smalltalk.withContext(function($ctx2) {return _st(self)._redraw();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})})),_st("initializeMouseHandling").__minus_gt((function(){
+return smalltalk.withContext(function($ctx2) {return _st(self)._initializeMouseHandling();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}))]);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"jsInterface",{},smalltalk.GraphRenderer)})},
+messageSends: ["->", "initializeWithSystem:", "redraw", "initializeMouseHandling"]}),
+smalltalk.GraphRenderer);
+
+smalltalk.addMethod(
+"_particleSystem",
+smalltalk.method({
+selector: "particleSystem",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { var $1;
+$1=self["@particleSystem"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"particleSystem",{},smalltalk.GraphRenderer)})},
+messageSends: []}),
+smalltalk.GraphRenderer);
+
+smalltalk.addMethod(
+"_redraw",
+smalltalk.method({
+selector: "redraw",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { _st(self["@ctx"])._fillStyle_("white");
+_st(self["@ctx"])._fillRect_y_width_height_((0),(0),_st(self["@canvas"])._width(),_st(self["@canvas"])._height());
+_st(self["@particleSystem"])._eachEdge_((function(edge,pt1,pt2){
+return smalltalk.withContext(function($ctx2) {return _st(self)._drawLineFrom_to_(pt1,pt2);
+}, function($ctx2) {$ctx2.fillBlock({edge:edge,pt1:pt1,pt2:pt2},$ctx1)})}));
+_st(self["@particleSystem"])._eachNode_((function(node,pt){
+return smalltalk.withContext(function($ctx2) {return _st(self)._drawPoint_forNode_(pt,node);
+}, function($ctx2) {$ctx2.fillBlock({node:node,pt:pt},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"redraw",{},smalltalk.GraphRenderer)})},
+messageSends: ["fillStyle:", "fillRect:y:width:height:", "width", "height", "eachEdge:", "drawLineFrom:to:", "eachNode:", "drawPoint:forNode:"]}),
+smalltalk.GraphRenderer);
+
+smalltalk.addMethod(
+"_setCanvas_",
+smalltalk.method({
+selector: "setCanvas:",
+fn: function (aCanvas){
+var self=this;
+return smalltalk.withContext(function($ctx1) { self["@canvas"]=aCanvas;
+self["@ctx"]=_st(self["@canvas"])._getContext_("2d");
+return self}, function($ctx1) {$ctx1.fill(self,"setCanvas:",{aCanvas:aCanvas},smalltalk.GraphRenderer)})},
+messageSends: ["getContext:"]}),
+smalltalk.GraphRenderer);
+
+
+smalltalk.addMethod(
+"_newWithCanvas_",
+smalltalk.method({
+selector: "newWithCanvas:",
+fn: function (aCanvas){
+var self=this;
+return smalltalk.withContext(function($ctx1) { var $2,$3,$1;
+$2=_st(self)._new();
+_st($2)._setCanvas_(aCanvas);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"newWithCanvas:",{aCanvas:aCanvas},smalltalk.GraphRenderer.klass)})},
+messageSends: ["setCanvas:", "new", "yourself"]}),
+smalltalk.GraphRenderer.klass);
+
+
 smalltalk.addClass('GraphVisualizer', smalltalk.Object, ['socket', 'logged'], 'Graphs');
 smalltalk.addMethod(
 "_init",
@@ -142,6 +425,7 @@ smalltalk.method({
 selector: "init",
 fn: function (){
 var self=this;
+var var_;
 return smalltalk.withContext(function($ctx1) { self["@socket"]=_st(_st(_st((smalltalk.GraphConnector || GraphConnector))._new())._createSocket_((function(evt){
 return smalltalk.withContext(function($ctx2) {return _st(self)._processMessage_(_st(evt)._data());
 }, function($ctx2) {$ctx2.fillBlock({evt:evt},$ctx1)})})))._connection();
@@ -151,9 +435,8 @@ return smalltalk.withContext(function($ctx2) {return _st(self)._registerUser();
 _st(_st(_st(document)._getElementById_("b_login"))._asJQuery())._click_((function(){
 return smalltalk.withContext(function($ctx2) {return _st(self)._login();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
-_st(_st(_st((smalltalk.GraphCanvas || GraphCanvas))._new())._init_("viewport"))._inspect();
-return self}, function($ctx1) {$ctx1.fill(self,"init",{},smalltalk.GraphVisualizer)})},
-messageSends: ["connection", "createSocket:", "processMessage:", "data", "new", "click:", "registerUser", "asJQuery", "getElementById:", "login", "inspect", "init:"]}),
+return self}, function($ctx1) {$ctx1.fill(self,"init",{var_:var_},smalltalk.GraphVisualizer)})},
+messageSends: ["connection", "createSocket:", "processMessage:", "data", "new", "click:", "registerUser", "asJQuery", "getElementById:", "login"]}),
 smalltalk.GraphVisualizer);
 
 smalltalk.addMethod(
@@ -260,7 +543,7 @@ messageSends: ["hidden:", "getElementById:"]}),
 smalltalk.GraphVisualizer);
 
 
-smalltalk.GraphVisualizer.klass.iVarNames = ['nodes','edges'];
+smalltalk.GraphVisualizer.klass.iVarNames = ['nodes','edges','sys'];
 smalltalk.addMethod(
 "_addEdge_to_",
 smalltalk.method({
@@ -366,13 +649,49 @@ selector: "draw",
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { _st(_st((smalltalk.GraphVisualizer || GraphVisualizer))._currentNodes())._do_((function(node){
-return smalltalk.withContext(function($ctx2) {return _st(sys)._addNode_(_st(node)._name());
+return smalltalk.withContext(function($ctx2) {return _st(_st(self)._sys())._addNode_(_st(node)._name());
 }, function($ctx2) {$ctx2.fillBlock({node:node},$ctx1)})}));
 _st(_st((smalltalk.GraphVisualizer || GraphVisualizer))._currentEdges())._do_((function(edge){
-return smalltalk.withContext(function($ctx2) {return _st(sys)._addEdge_and_(_st(edge)._src(),_st(edge)._dest());
+return smalltalk.withContext(function($ctx2) {return _st(_st(self)._sys())._addEdge_and_(_st(edge)._src(),_st(edge)._dest());
 }, function($ctx2) {$ctx2.fillBlock({edge:edge},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"draw",{},smalltalk.GraphVisualizer.klass)})},
-messageSends: ["do:", "addNode:", "name", "currentNodes", "addEdge:and:", "src", "dest", "currentEdges"]}),
+messageSends: ["do:", "addNode:", "name", "sys", "currentNodes", "addEdge:and:", "src", "dest", "currentEdges"]}),
+smalltalk.GraphVisualizer.klass);
+
+smalltalk.addMethod(
+"_sys",
+smalltalk.method({
+selector: "sys",
+fn: function (){
+var self=this;
+var renderer;
+return smalltalk.withContext(function($ctx1) { var $1,$2;
+$1=self["@sys"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@sys"]=_st(_st(arbor)._ParticleSystem())._value_((1000));
+self["@sys"];
+_st(self["@sys"])._parameters_(smalltalk.HashedCollection._fromPairs_([_st("gravity").__minus_gt(true)]));
+renderer=_st(_st((smalltalk.GraphRenderer || GraphRenderer))._newWithCanvas_(_st(_st(_st("#").__comma("viewport"))._asJQuery())._at_((0))))._jsInterface();
+renderer;
+_st(_st(self["@sys"])._asJQuery())._attr_set_("renderer",renderer);
+} else {
+$1;
+};
+$2=self["@sys"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"sys",{renderer:renderer},smalltalk.GraphVisualizer.klass)})},
+messageSends: ["ifNil:", "value:", "ParticleSystem", "parameters:", "->", "jsInterface", "newWithCanvas:", "at:", "asJQuery", ",", "attr:set:"]}),
+smalltalk.GraphVisualizer.klass);
+
+smalltalk.addMethod(
+"_sys_",
+smalltalk.method({
+selector: "sys:",
+fn: function (aSys){
+var self=this;
+return smalltalk.withContext(function($ctx1) { self["@sys"]=aSys;
+return self}, function($ctx1) {$ctx1.fill(self,"sys:",{aSys:aSys},smalltalk.GraphVisualizer.klass)})},
+messageSends: []}),
 smalltalk.GraphVisualizer.klass);
 
 
