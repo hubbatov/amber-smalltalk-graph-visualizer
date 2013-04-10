@@ -1,4 +1,28 @@
 smalltalk.addPackage('Graphs');
+smalltalk.addClass('GraphCanvas', smalltalk.Object, ['canvas', 'context', 'particalSystem'], 'Graphs');
+smalltalk.addMethod(
+"_init_",
+smalltalk.method({
+selector: "init:",
+fn: function (aCanvas){
+var self=this;
+var that;
+return smalltalk.withContext(function($ctx1) { var $1;
+self["@canvas"]=_st(_st(_st("#").__comma(aCanvas))._asJQuery())._at_((0));
+self["@context"]=_st(self["@canvas"])._getContext_("2d");
+_st(that).__eq(smalltalk.HashedCollection._fromPairs_([_st("init").__minus_gt((function(system){
+return smalltalk.withContext(function($ctx2) {return _st(self)._initialize_(system);
+}, function($ctx2) {$ctx2.fillBlock({system:system},$ctx1)})})),_st("redraw").__minus_gt((function(){
+return smalltalk.withContext(function($ctx2) {}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})})),_st("initMouseHandling").__minus_gt((function(){
+return smalltalk.withContext(function($ctx2) {}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}))]));
+$1=that;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"init:",{aCanvas:aCanvas,that:that},smalltalk.GraphCanvas)})},
+messageSends: ["at:", "asJQuery", ",", "getContext:", "=", "->", "initialize:"]}),
+smalltalk.GraphCanvas);
+
+
+
 smalltalk.addClass('GraphConnector', smalltalk.Object, ['socket'], 'Graphs');
 smalltalk.addMethod(
 "_connection",
@@ -127,8 +151,9 @@ return smalltalk.withContext(function($ctx2) {return _st(self)._registerUser();
 _st(_st(_st(document)._getElementById_("b_login"))._asJQuery())._click_((function(){
 return smalltalk.withContext(function($ctx2) {return _st(self)._login();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st(_st(_st((smalltalk.GraphCanvas || GraphCanvas))._new())._init_("viewport"))._inspect();
 return self}, function($ctx1) {$ctx1.fill(self,"init",{},smalltalk.GraphVisualizer)})},
-messageSends: ["connection", "createSocket:", "processMessage:", "data", "new", "click:", "registerUser", "asJQuery", "getElementById:", "login"]}),
+messageSends: ["connection", "createSocket:", "processMessage:", "data", "new", "click:", "registerUser", "asJQuery", "getElementById:", "login", "inspect", "init:"]}),
 smalltalk.GraphVisualizer);
 
 smalltalk.addMethod(

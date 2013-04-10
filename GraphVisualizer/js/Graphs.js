@@ -1,4 +1,33 @@
 smalltalk.addPackage('Graphs');
+smalltalk.addClass('GraphCanvas', smalltalk.Object, ['canvas', 'context', 'particalSystem'], 'Graphs');
+smalltalk.addMethod(
+"_init_",
+smalltalk.method({
+selector: "init:",
+category: 'not yet classified',
+fn: function (aCanvas){
+var self=this;
+var that;
+return smalltalk.withContext(function($ctx1) { var $1;
+self["@canvas"]=_st(_st(_st("#").__comma(aCanvas))._asJQuery())._at_((0));
+self["@context"]=_st(self["@canvas"])._getContext_("2d");
+_st(that).__eq(smalltalk.HashedCollection._fromPairs_([_st("init").__minus_gt((function(system){
+return smalltalk.withContext(function($ctx2) {return _st(self)._initialize_(system);
+}, function($ctx2) {$ctx2.fillBlock({system:system},$ctx1)})})),_st("redraw").__minus_gt((function(){
+return smalltalk.withContext(function($ctx2) {}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})})),_st("initMouseHandling").__minus_gt((function(){
+return smalltalk.withContext(function($ctx2) {}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}))]));
+$1=that;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"init:",{aCanvas:aCanvas,that:that},smalltalk.GraphCanvas)})},
+args: ["aCanvas"],
+source: "init: aCanvas\x0a\x09| that |\x0a\x09canvas := ('#',aCanvas) asJQuery at:0.\x0a\x09context := canvas getContext: '2d'.\x0a\x09that = #{ \x0a\x09\x09\x09'init' -> [: system | self initialize: system ].\x0a\x09\x09\x09'redraw' -> [  ].\x0a\x09\x09\x09'initMouseHandling' -> [  ]\x0a\x09}.\x0a\x09^that",
+messageSends: ["at:", "asJQuery", ",", "getContext:", "=", "->", "initialize:"],
+referencedClasses: []
+}),
+smalltalk.GraphCanvas);
+
+
+
 smalltalk.addClass('GraphConnector', smalltalk.Object, ['socket'], 'Graphs');
 smalltalk.addMethod(
 "_connection",
@@ -168,11 +197,12 @@ return smalltalk.withContext(function($ctx2) {return _st(self)._registerUser();
 _st(_st(_st(document)._getElementById_("b_login"))._asJQuery())._click_((function(){
 return smalltalk.withContext(function($ctx2) {return _st(self)._login();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st(_st(_st((smalltalk.GraphCanvas || GraphCanvas))._new())._init_("viewport"))._inspect();
 return self}, function($ctx1) {$ctx1.fill(self,"init",{},smalltalk.GraphVisualizer)})},
 args: [],
-source: "init\x0a\x09socket := ( GraphConnector new createSocket: [ :evt | self processMessage: ( evt data ) ] ) connection.\x0a\x09( document getElementById: 'b_register' ) asJQuery click: [ self registerUser ].\x0a\x09( document getElementById: 'b_login' ) asJQuery click: [ self login ].",
-messageSends: ["connection", "createSocket:", "processMessage:", "data", "new", "click:", "registerUser", "asJQuery", "getElementById:", "login"],
-referencedClasses: ["GraphConnector"]
+source: "init\x0a\x09socket := ( GraphConnector new createSocket: [ :evt | self processMessage: ( evt data ) ] ) connection.\x0a\x09( document getElementById: 'b_register' ) asJQuery click: [ self registerUser ].\x0a\x09( document getElementById: 'b_login' ) asJQuery click: [ self login ].\x0a\x09( GraphCanvas new init: 'viewport' ) inspect",
+messageSends: ["connection", "createSocket:", "processMessage:", "data", "new", "click:", "registerUser", "asJQuery", "getElementById:", "login", "inspect", "init:"],
+referencedClasses: ["GraphConnector", "GraphCanvas"]
 }),
 smalltalk.GraphVisualizer);
 

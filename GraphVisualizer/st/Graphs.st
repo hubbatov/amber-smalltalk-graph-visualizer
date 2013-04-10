@@ -1,4 +1,22 @@
 Smalltalk current createPackage: 'Graphs'!
+Object subclass: #GraphCanvas
+	instanceVariableNames: 'canvas context particalSystem'
+	package: 'Graphs'!
+
+!GraphCanvas methodsFor: 'not yet classified'!
+
+init: aCanvas
+	| that |
+	canvas := ('#',aCanvas) asJQuery at:0.
+	context := canvas getContext: '2d'.
+	that = #{ 
+			'init' -> [: system | self initialize: system ].
+			'redraw' -> [  ].
+			'initMouseHandling' -> [  ]
+	}.
+	^that
+! !
+
 Object subclass: #GraphConnector
 	instanceVariableNames: 'socket'
 	package: 'Graphs'!
@@ -62,6 +80,7 @@ init
 	socket := ( GraphConnector new createSocket: [ :evt | self processMessage: ( evt data ) ] ) connection.
 	( document getElementById: 'b_register' ) asJQuery click: [ self registerUser ].
 	( document getElementById: 'b_login' ) asJQuery click: [ self login ].
+	( GraphCanvas new init: 'viewport' ) inspect
 !
 
 isLogged
