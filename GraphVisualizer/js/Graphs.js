@@ -290,6 +290,7 @@ referencedClasses: []
 smalltalk.GraphMouseHandler);
 
 
+smalltalk.GraphMouseHandler.klass.iVarNames = ['handler'];
 smalltalk.addMethod(
 "_newForRenderer_",
 smalltalk.method({
@@ -297,16 +298,23 @@ selector: "newForRenderer:",
 category: 'instance creation',
 fn: function (aRenderer){
 var self=this;
-return smalltalk.withContext(function($ctx1) { var $2,$3,$1;
+return smalltalk.withContext(function($ctx1) { var $1,$2,$3,$4;
+$1=self["@handler"];
+if(($receiver = $1) == nil || $receiver == undefined){
 $2=_st(self)._new();
 _st($2)._setRenderer_(aRenderer);
 $3=_st($2)._yourself();
-$1=$3;
-return $1;
+self["@handler"]=$3;
+self["@handler"];
+} else {
+$1;
+};
+$4=self["@handler"];
+return $4;
 }, function($ctx1) {$ctx1.fill(self,"newForRenderer:",{aRenderer:aRenderer},smalltalk.GraphMouseHandler.klass)})},
 args: ["aRenderer"],
-source: "newForRenderer: aRenderer\x0a\x09^self new\x0a\x09\x09setRenderer: aRenderer;\x0a\x09\x09yourself",
-messageSends: ["setRenderer:", "new", "yourself"],
+source: "newForRenderer: aRenderer\x0a\x09handler ifNil: [\x0a\x09\x09handler := self new\x0a\x09\x09\x09setRenderer: aRenderer;\x0a\x09\x09\x09yourself ].\x0a\x09^handler",
+messageSends: ["ifNil:", "setRenderer:", "new", "yourself"],
 referencedClasses: []
 }),
 smalltalk.GraphMouseHandler.klass);
@@ -320,15 +328,13 @@ selector: "clicked:",
 category: 'not yet classified',
 fn: function (event){
 var self=this;
-var pos;
-return smalltalk.withContext(function($ctx1) { pos=_st(_st(self["@form"])._asJQuery())._offset();
-_st(_st(self)._lastpos())._x_(_st(_st(event)._pageX()).__plus(_st(pos)._left()));
-_st(_st(self)._lastpos())._y_(_st(_st(event)._pageY()).__plus(_st(pos)._top()));
+return smalltalk.withContext(function($ctx1) { _st(_st(self)._lastpos())._x_(_st(event)._pageX());
+_st(_st(self)._lastpos())._y_(_st(event)._pageY());
 self["@move"]=true;
-return self}, function($ctx1) {$ctx1.fill(self,"clicked:",{event:event,pos:pos},smalltalk.GraphMovableElement)})},
+return self}, function($ctx1) {$ctx1.fill(self,"clicked:",{event:event},smalltalk.GraphMovableElement)})},
 args: ["event"],
-source: "clicked: event\x0a\x09| pos |\x0a\x09pos := form asJQuery offset.\x0a\x09self lastpos x: (event pageX + pos left).\x0a\x09self lastpos y: (event pageY + pos top).\x0a\x09move := true.\x0a\x09",
-messageSends: ["offset", "asJQuery", "x:", "+", "left", "pageX", "lastpos", "y:", "top", "pageY"],
+source: "clicked: event\x0a\x09self lastpos x: (event pageX ).\x0a\x09self lastpos y: (event pageY ).\x0a\x09move := true.\x0a\x09",
+messageSends: ["x:", "pageX", "lastpos", "y:", "pageY"],
 referencedClasses: []
 }),
 smalltalk.GraphMovableElement);
@@ -415,30 +421,24 @@ selector: "moved:",
 category: 'not yet classified',
 fn: function (event){
 var self=this;
-var temp;
-return smalltalk.withContext(function($ctx1) { var $1,$2,$3,$4,$5;
+return smalltalk.withContext(function($ctx1) { var $1,$2,$3;
 $1=_st(self)._move();
 if(smalltalk.assert($1)){
-temp=_st((smalltalk.Point || Point))._new();
-temp;
-$2=temp;
-_st($2)._x_(_st(_st(self["@lastpos"])._x()).__minus(_st(event)._pageX()));
-$3=_st($2)._y_(_st(_st(self["@lastpos"])._y()).__minus(_st(event)._pageY()));
-$3;
 _st(_st(self["@form"])._style())._position_("absolute");
-_st(_st(self["@form"])._style())._left_(_st(_st(_st(_st(self["@lastpos"])._x()).__minus(_st(temp)._x()))._asString()).__comma("px"));
-_st(_st(self["@form"])._style())._top_(_st(_st(_st(_st(self["@lastpos"])._y()).__minus(_st(temp)._y()))._asString()).__comma("px"));
-$4=_st((smalltalk.Point || Point))._new();
-_st($4)._x_(_st(_st(_st(self["@form"])._offset())._left()).__plus(_st(event)._pageX()));
-$5=_st($4)._y_(_st(_st(_st(self["@form"])._offset())._top()).__plus(_st(event)._pageY()));
-self["@lastpos"]=$5;
-self["@lastpos"];
+_st(_st(self["@form"])._style())._left_(_st(_st(_st(_st(self["@form"])._offsetLeft()).__minus(_st(_st(self["@lastpos"])._x()).__minus(_st(event)._pageX())))._asString()).__comma("px"));
+_st(_st(self["@form"])._style())._top_(_st(_st(_st(_st(self["@form"])._offsetTop()).__minus(_st(_st(self["@lastpos"])._y()).__minus(_st(event)._pageY())))._asString()).__comma("px"));
+_st(_st(self["@form"])._style())._cursor_("move");
+$2=self["@lastpos"];
+_st($2)._x_(_st(event)._pageX());
+$3=_st($2)._y_(_st(event)._pageY());
+$3;
 };
-return self}, function($ctx1) {$ctx1.fill(self,"moved:",{event:event,temp:temp},smalltalk.GraphMovableElement)})},
+return false;
+}, function($ctx1) {$ctx1.fill(self,"moved:",{event:event},smalltalk.GraphMovableElement)})},
 args: ["event"],
-source: "moved: event\x0a\x09| temp |\x0a\x09self move ifTrue: [\x0a\x09\x09temp := Point new.\x0a\x09\x09temp x: (( lastpos x ) - ( event pageX )); y:  ( ( lastpos y ) - ( event pageY )) .\x0a\x09\x09form style position: 'absolute'.\x0a\x09\x09form style left: (( lastpos x - temp x ) asString), 'px'.\x0a\x09\x09form style top: (( lastpos y - temp y ) asString), 'px'.\x0a\x09\x09lastpos := Point new x: ( form offset left + event pageX); y: ( form offset top + event pageY).\x0a\x09]",
-messageSends: ["ifTrue:", "new", "x:", "-", "pageX", "x", "y:", "pageY", "y", "position:", "style", "left:", ",", "asString", "top:", "+", "left", "offset", "top", "move"],
-referencedClasses: ["Point"]
+source: "moved: event\x0a\x09self move ifTrue: [\x0a\x09\x09form style position: 'absolute'.\x0a\x09\x09form style left: (( form offsetLeft - (( lastpos x ) - ( event pageX )) ) asString), 'px'.\x0a\x09\x09form style top: (( form offsetTop - (( lastpos y ) - ( event pageY )) ) asString), 'px'.\x0a\x09\x09form style cursor: 'move'.\x0a\x09\x09lastpos x: ( event pageX); y: ( event pageY).\x0a\x09].\x0a\x09^false",
+messageSends: ["ifTrue:", "position:", "style", "left:", ",", "asString", "-", "pageX", "x", "offsetLeft", "top:", "pageY", "y", "offsetTop", "cursor:", "x:", "y:", "move"],
+referencedClasses: []
 }),
 smalltalk.GraphMovableElement);
 
@@ -449,11 +449,12 @@ selector: "released:",
 category: 'not yet classified',
 fn: function (event){
 var self=this;
-return smalltalk.withContext(function($ctx1) { self["@move"]=false;
+return smalltalk.withContext(function($ctx1) { _st(_st(self["@form"])._style())._cursor_("default");
+self["@move"]=false;
 return self}, function($ctx1) {$ctx1.fill(self,"released:",{event:event},smalltalk.GraphMovableElement)})},
 args: ["event"],
-source: "released: event\x0a\x09move := false.",
-messageSends: [],
+source: "released: event\x0a\x09form style cursor: 'default'.\x0a\x09move := false.",
+messageSends: ["cursor:", "style"],
 referencedClasses: []
 }),
 smalltalk.GraphMovableElement);
@@ -1226,7 +1227,7 @@ $2=self["@sys"];
 return $2;
 }, function($ctx1) {$ctx1.fill(self,"sys",{canvas:canvas,renderer:renderer},smalltalk.GraphVisualizer.klass)})},
 args: [],
-source: "sys\x0a\x09| canvas renderer |\x0a\x09\x09sys ifNil: [ \x0a\x09\x09sys := (arbor ParticleSystem) value: 1000.\x0a\x09\x09( sys parameters ) asJQuery attr: 'gravity'  value:  true.\x0a\x09\x09canvas := (GraphRenderer newWithCanvas: ( ('#', 'viewport')  asJQuery at: 0 ) ).\x0a\x09\x09self updateRendererWithCanvas: ( canvas canvas ).\x0a\x09\x09window onresize: [\x0a\x09\x09\x09\x09\x09self updateRendererWithCanvas: ( canvas canvas ).\x0a\x09\x09].\x0a\x09].\x0a\x09^sys",
+source: "sys\x0a\x09| canvas renderer |\x0a\x09\x09sys ifNil: [ \x0a\x09\x09\x09sys := (arbor ParticleSystem) value: 1000.\x0a\x09\x09\x09( sys parameters ) asJQuery attr: 'gravity'  value:  true.\x0a\x09\x09\x09canvas := (GraphRenderer newWithCanvas: ( ('#', 'viewport')  asJQuery at: 0 ) ).\x0a\x09\x09\x09self updateRendererWithCanvas: ( canvas canvas ).\x0a\x09\x09\x09window onresize: [\x0a\x09\x09\x09\x09\x09\x09self updateRendererWithCanvas: ( canvas canvas ).\x0a\x09\x09].\x0a\x09].\x0a\x09^sys",
 messageSends: ["ifNil:", "value:", "ParticleSystem", "attr:value:", "asJQuery", "parameters", "newWithCanvas:", "at:", ",", "updateRendererWithCanvas:", "canvas", "onresize:"],
 referencedClasses: ["GraphRenderer"]
 }),

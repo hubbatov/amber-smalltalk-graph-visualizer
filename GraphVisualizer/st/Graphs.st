@@ -105,12 +105,16 @@ getMousePositionForEvent: event
 	^mousePosition
 ! !
 
+GraphMouseHandler class instanceVariableNames: 'handler'!
+
 !GraphMouseHandler class methodsFor: 'instance creation'!
 
 newForRenderer: aRenderer
-	^self new
-		setRenderer: aRenderer;
-		yourself
+	handler ifNil: [
+		handler := self new
+			setRenderer: aRenderer;
+			yourself ].
+	^handler
 ! !
 
 Object subclass: #GraphMovableElement
@@ -120,10 +124,8 @@ Object subclass: #GraphMovableElement
 !GraphMovableElement methodsFor: 'not yet classified'!
 
 clicked: event
-	| pos |
-	pos := form asJQuery offset.
-	self lastpos x: (event pageX + pos left).
-	self lastpos y: (event pageY + pos top).
+	self lastpos x: (event pageX ).
+	self lastpos y: (event pageY ).
 	move := true.
 !
 
@@ -145,18 +147,18 @@ move
 !
 
 moved: event
-	| temp |
 	self move ifTrue: [
-		temp := Point new.
-		temp x: (( lastpos x ) - ( event pageX )); y:  ( ( lastpos y ) - ( event pageY )) .
 		form style position: 'absolute'.
-		form style left: (( lastpos x - temp x ) asString), 'px'.
-		form style top: (( lastpos y - temp y ) asString), 'px'.
-		lastpos := Point new x: ( form offset left + event pageX); y: ( form offset top + event pageY).
-	]
+		form style left: (( form offsetLeft - (( lastpos x ) - ( event pageX )) ) asString), 'px'.
+		form style top: (( form offsetTop - (( lastpos y ) - ( event pageY )) ) asString), 'px'.
+		form style cursor: 'move'.
+		lastpos x: ( event pageX); y: ( event pageY).
+	].
+	^false
 !
 
 released: event
+	form style cursor: 'default'.
 	move := false.
 ! !
 
@@ -395,12 +397,12 @@ resize: aCanvas
 sys
 	| canvas renderer |
 		sys ifNil: [ 
-		sys := (arbor ParticleSystem) value: 1000.
-		( sys parameters ) asJQuery attr: 'gravity'  value:  true.
-		canvas := (GraphRenderer newWithCanvas: ( ('#', 'viewport')  asJQuery at: 0 ) ).
-		self updateRendererWithCanvas: ( canvas canvas ).
-		window onresize: [
-					self updateRendererWithCanvas: ( canvas canvas ).
+			sys := (arbor ParticleSystem) value: 1000.
+			( sys parameters ) asJQuery attr: 'gravity'  value:  true.
+			canvas := (GraphRenderer newWithCanvas: ( ('#', 'viewport')  asJQuery at: 0 ) ).
+			self updateRendererWithCanvas: ( canvas canvas ).
+			window onresize: [
+						self updateRendererWithCanvas: ( canvas canvas ).
 		].
 	].
 	^sys

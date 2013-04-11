@@ -50,6 +50,8 @@
 #functionsForm{
     width: 280px; 
     height: 120px; 
+    border-radius: 10px;
+    border: 2px solid #fc0;;
     background: #cc0; 
     position: absolute;
 }
