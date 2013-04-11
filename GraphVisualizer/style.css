@@ -46,3 +46,10 @@
     margin: -10px;
     margin-top: 10px;
 }
+
+#functionsForm{
+    width: 280px; 
+    height: 120px; 
+    background: #cc0; 
+    position: absolute;
+}

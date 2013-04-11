@@ -237,6 +237,124 @@ messageSends: ["setRenderer:", "new", "yourself"]}),
 smalltalk.GraphMouseHandler.klass);
 
 
+smalltalk.addClass('GraphMovableElement', smalltalk.Object, ['lastpos', 'move', 'form'], 'Graphs');
+smalltalk.addMethod(
+"_clicked_",
+smalltalk.method({
+selector: "clicked:",
+fn: function (event){
+var self=this;
+var pos;
+return smalltalk.withContext(function($ctx1) { pos=_st(_st(self["@form"])._asJQuery())._offset();
+_st(_st(self)._lastpos())._x_(_st(_st(event)._pageX()).__plus(_st(pos)._left()));
+_st(_st(self)._lastpos())._y_(_st(_st(event)._pageY()).__plus(_st(pos)._top()));
+self["@move"]=true;
+return self}, function($ctx1) {$ctx1.fill(self,"clicked:",{event:event,pos:pos},smalltalk.GraphMovableElement)})},
+messageSends: ["offset", "asJQuery", "x:", "+", "left", "pageX", "lastpos", "y:", "top", "pageY"]}),
+smalltalk.GraphMovableElement);
+
+smalltalk.addMethod(
+"_enableMoving_",
+smalltalk.method({
+selector: "enableMoving:",
+fn: function (aDivId){
+var self=this;
+return smalltalk.withContext(function($ctx1) { self["@form"]=_st(document)._getElementById_(aDivId);
+_st(_st(self["@form"])._asJQuery())._mousedown_((function(ev){
+return smalltalk.withContext(function($ctx2) {return _st(self)._clicked_(ev);
+}, function($ctx2) {$ctx2.fillBlock({ev:ev},$ctx1)})}));
+_st(_st(self["@form"])._asJQuery())._mouseup_((function(ev){
+return smalltalk.withContext(function($ctx2) {return _st(self)._released_(ev);
+}, function($ctx2) {$ctx2.fillBlock({ev:ev},$ctx1)})}));
+_st(_st(self["@form"])._asJQuery())._mousemove_((function(ev){
+return smalltalk.withContext(function($ctx2) {return _st(self)._moved_(ev);
+}, function($ctx2) {$ctx2.fillBlock({ev:ev},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"enableMoving:",{aDivId:aDivId},smalltalk.GraphMovableElement)})},
+messageSends: ["getElementById:", "mousedown:", "clicked:", "asJQuery", "mouseup:", "released:", "mousemove:", "moved:"]}),
+smalltalk.GraphMovableElement);
+
+smalltalk.addMethod(
+"_lastpos",
+smalltalk.method({
+selector: "lastpos",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { var $1,$2;
+$1=self["@lastpos"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@lastpos"]=_st((smalltalk.Point || Point))._new();
+self["@lastpos"];
+} else {
+$1;
+};
+$2=self["@lastpos"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"lastpos",{},smalltalk.GraphMovableElement)})},
+messageSends: ["ifNil:", "new"]}),
+smalltalk.GraphMovableElement);
+
+smalltalk.addMethod(
+"_move",
+smalltalk.method({
+selector: "move",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { var $1,$2;
+$1=self["@move"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@move"]=false;
+self["@move"];
+} else {
+$1;
+};
+$2=self["@move"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"move",{},smalltalk.GraphMovableElement)})},
+messageSends: ["ifNil:"]}),
+smalltalk.GraphMovableElement);
+
+smalltalk.addMethod(
+"_moved_",
+smalltalk.method({
+selector: "moved:",
+fn: function (event){
+var self=this;
+var temp;
+return smalltalk.withContext(function($ctx1) { var $1,$2,$3,$4,$5;
+$1=_st(self)._move();
+if(smalltalk.assert($1)){
+temp=_st((smalltalk.Point || Point))._new();
+temp;
+$2=temp;
+_st($2)._x_(_st(_st(self["@lastpos"])._x()).__minus(_st(event)._pageX()));
+$3=_st($2)._y_(_st(_st(self["@lastpos"])._y()).__minus(_st(event)._pageY()));
+$3;
+_st(_st(self["@form"])._style())._position_("absolute");
+_st(_st(self["@form"])._style())._left_(_st(_st(_st(_st(self["@lastpos"])._x()).__minus(_st(temp)._x()))._asString()).__comma("px"));
+_st(_st(self["@form"])._style())._top_(_st(_st(_st(_st(self["@lastpos"])._y()).__minus(_st(temp)._y()))._asString()).__comma("px"));
+$4=_st((smalltalk.Point || Point))._new();
+_st($4)._x_(_st(_st(_st(self["@form"])._offset())._left()).__plus(_st(event)._pageX()));
+$5=_st($4)._y_(_st(_st(_st(self["@form"])._offset())._top()).__plus(_st(event)._pageY()));
+self["@lastpos"]=$5;
+self["@lastpos"];
+};
+return self}, function($ctx1) {$ctx1.fill(self,"moved:",{event:event,temp:temp},smalltalk.GraphMovableElement)})},
+messageSends: ["ifTrue:", "new", "x:", "-", "pageX", "x", "y:", "pageY", "y", "position:", "style", "left:", ",", "asString", "top:", "+", "left", "offset", "top", "move"]}),
+smalltalk.GraphMovableElement);
+
+smalltalk.addMethod(
+"_released_",
+smalltalk.method({
+selector: "released:",
+fn: function (event){
+var self=this;
+return smalltalk.withContext(function($ctx1) { self["@move"]=false;
+return self}, function($ctx1) {$ctx1.fill(self,"released:",{event:event},smalltalk.GraphMovableElement)})},
+messageSends: []}),
+smalltalk.GraphMovableElement);
+
+
+
 smalltalk.addClass('GraphNode', smalltalk.Object, ['name'], 'Graphs');
 smalltalk.addMethod(
 "_name",
@@ -570,8 +688,9 @@ return smalltalk.withContext(function($ctx2) {return _st(self)._registerUser();
 _st(_st(_st(document)._getElementById_("b_login"))._asJQuery())._click_((function(){
 return smalltalk.withContext(function($ctx2) {return _st(self)._login();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st(_st((smalltalk.GraphMovableElement || GraphMovableElement))._new())._enableMoving_("functionsForm");
 return self}, function($ctx1) {$ctx1.fill(self,"init",{var_:var_},smalltalk.GraphVisualizer)})},
-messageSends: ["connection", "createSocket:", "processMessage:", "data", "new", "click:", "registerUser", "asJQuery", "getElementById:", "login"]}),
+messageSends: ["connection", "createSocket:", "processMessage:", "data", "new", "click:", "registerUser", "asJQuery", "getElementById:", "login", "enableMoving:"]}),
 smalltalk.GraphVisualizer);
 
 smalltalk.addMethod(

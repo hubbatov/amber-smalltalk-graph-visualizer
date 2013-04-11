@@ -113,6 +113,53 @@ newForRenderer: aRenderer
 		yourself
 ! !
 
+Object subclass: #GraphMovableElement
+	instanceVariableNames: 'lastpos move form'
+	package: 'Graphs'!
+
+!GraphMovableElement methodsFor: 'not yet classified'!
+
+clicked: event
+	| pos |
+	pos := form asJQuery offset.
+	self lastpos x: (event pageX + pos left).
+	self lastpos y: (event pageY + pos top).
+	move := true.
+!
+
+enableMoving: aDivId
+		form := ( document getElementById: aDivId).
+		form asJQuery mousedown: [ :ev | self clicked: ev ].
+		form asJQuery mouseup: [  :ev | self released: ev ].
+		form asJQuery mousemove: [  :ev | self moved: ev ].
+!
+
+lastpos
+	lastpos ifNil: [ lastpos := Point new ].
+	^lastpos
+!
+
+move
+	move ifNil: [ move := false ].
+	^move
+!
+
+moved: event
+	| temp |
+	self move ifTrue: [
+		temp := Point new.
+		temp x: (( lastpos x ) - ( event pageX )); y:  ( ( lastpos y ) - ( event pageY )) .
+		form style position: 'absolute'.
+		form style left: (( lastpos x - temp x ) asString), 'px'.
+		form style top: (( lastpos y - temp y ) asString), 'px'.
+		lastpos := Point new x: ( form offset left + event pageX); y: ( form offset top + event pageY).
+	]
+!
+
+released: event
+	move := false.
+! !
+
 Object subclass: #GraphNode
 	instanceVariableNames: 'name'
 	package: 'Graphs'!
@@ -261,6 +308,8 @@ init
 	socket := ( GraphConnector new createSocket: [ :evt | self processMessage: ( evt data ) ] ) connection.
 	( document getElementById: 'b_register' ) asJQuery click: [ self registerUser ].
 	( document getElementById: 'b_login' ) asJQuery click: [ self login ].
+	
+	GraphMovableElement new enableMoving: 'functionsForm'
 !
 
 isLogged
