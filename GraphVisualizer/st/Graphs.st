@@ -168,11 +168,14 @@ drawLineFrom: pt1 to: pt2
 drawPoint: pt forNode: node
 	|w|
 	w := 10.
-	ctx fillStyle: 'orange';
-		fillRect: (pt x - (w / 2)) y: (pt y - (w / 2)) width: w height: w;
-		fillStyle: 'black';
-		font: 'italic 13px sans-serif';
-		fillText: node name x: (pt x + 8) y: pt y + 8
+	ctx fillStyle: ( GraphSettings nodeColor );
+		beginPath;
+		arc: (pt x ) y: ( pt y  ) w: ( GraphSettings nodeWidth ) h:0 r: ( Math PI * 2 ); 
+		closePath;
+		fill;
+		fillStyle: ( GraphSettings textColor );
+		font: ( GraphSettings font );
+		fillText: node name x: (pt x - ( GraphSettings nodeWidth * 2 )) y: ( pt y + (GraphSettings nodeWidth * 2) )
 !
 
 redraw
@@ -201,6 +204,50 @@ newWithCanvas: aCanvas
 	^self new
 		setCanvas: aCanvas;
 		yourself.
+! !
+
+Object subclass: #GraphSettings
+	instanceVariableNames: ''
+	package: 'Graphs'!
+
+GraphSettings class instanceVariableNames: 'font nodeColor nodeWidth textColor'!
+
+!GraphSettings class methodsFor: 'not yet classified'!
+
+font
+	font ifNil: [ font := '14px italic verdana' ].
+	^font
+!
+
+font: aFont
+	font := aFont
+!
+
+nodeColor
+	nodeColor ifNil: [ nodeColor := 'red' ].
+	^nodeColor
+!
+
+nodeColor: aNodeColor
+	nodeColor := aNodeColor
+!
+
+nodeWidth
+	nodeWidth ifNil: [ nodeWidth := 10 ].
+	^nodeWidth
+!
+
+nodeWidth: aWidth
+	nodeWidth := aWidth
+!
+
+textColor
+	textColor ifNil: [ textColor := 'black' ].
+	^textColor
+!
+
+textColor: aTextColor
+	textColor :=  aTextColor
 ! !
 
 Object subclass: #GraphVisualizer
@@ -291,18 +338,34 @@ draw
 		( GraphVisualizer currentEdges ) do: [ :edge |  self sys addEdge: ( edge src ) and: ( edge dest ) ]
 !
 
+resize: aCanvas
+	aCanvas width: ( window innerWidth - 20 ).
+   aCanvas height: ( window innerHeight - 30 )
+!
+
 sys
-	| renderer |
-	sys ifNil: [ 
+	| canvas renderer |
+		sys ifNil: [ 
 		sys := (arbor ParticleSystem) value: 1000.
-	    sys parameters: #{ 'gravity' -> true }.
-		renderer := (GraphRenderer newWithCanvas: ( ('#', 'viewport')  asJQuery at: 0 ) ) jsInterface.
-		( sys asJQuery ) attr: 'renderer' set: renderer.
+		( sys parameters ) asJQuery attr: 'gravity'  value:  true.
+		canvas := (GraphRenderer newWithCanvas: ( ('#', 'viewport')  asJQuery at: 0 ) ).
+		self updateRendererWithCanvas: ( canvas canvas ).
+		window onresize: [
+					self updateRendererWithCanvas: ( canvas canvas ).
+		].
 	].
 	^sys
 !
 
 sys: aSys
 	sys := aSys
+!
+
+updateRendererWithCanvas: aCanvas
+	| newCanvas newRenderer |
+	self resize: ( aCanvas ).
+	newCanvas := (GraphRenderer newWithCanvas: ( ('#', 'viewport')  asJQuery at: 0 ) ).
+	newRenderer := newCanvas jsInterface.
+	( sys asJQuery ) attr: 'renderer' set: newRenderer.
 ! !
 

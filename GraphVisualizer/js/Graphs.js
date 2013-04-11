@@ -402,16 +402,19 @@ var w;
 return smalltalk.withContext(function($ctx1) { var $1,$2;
 w=(10);
 $1=self["@ctx"];
-_st($1)._fillStyle_("orange");
-_st($1)._fillRect_y_width_height_(_st(_st(pt)._x()).__minus(_st(w).__slash((2))),_st(_st(pt)._y()).__minus(_st(w).__slash((2))),w,w);
-_st($1)._fillStyle_("black");
-_st($1)._font_("italic 13px sans-serif");
-$2=_st($1)._fillText_x_y_(_st(node)._name(),_st(_st(pt)._x()).__plus((8)),_st(_st(pt)._y()).__plus((8)));
+_st($1)._fillStyle_(_st((smalltalk.GraphSettings || GraphSettings))._nodeColor());
+_st($1)._beginPath();
+_st($1)._arc_y_w_h_r_(_st(pt)._x(),_st(pt)._y(),_st((smalltalk.GraphSettings || GraphSettings))._nodeWidth(),(0),_st(_st((smalltalk.Math || Math))._PI()).__star((2)));
+_st($1)._closePath();
+_st($1)._fill();
+_st($1)._fillStyle_(_st((smalltalk.GraphSettings || GraphSettings))._textColor());
+_st($1)._font_(_st((smalltalk.GraphSettings || GraphSettings))._font());
+$2=_st($1)._fillText_x_y_(_st(node)._name(),_st(_st(pt)._x()).__minus(_st(_st((smalltalk.GraphSettings || GraphSettings))._nodeWidth()).__star((2))),_st(_st(pt)._y()).__plus(_st(_st((smalltalk.GraphSettings || GraphSettings))._nodeWidth()).__star((2))));
 return self}, function($ctx1) {$ctx1.fill(self,"drawPoint:forNode:",{pt:pt,node:node,w:w},smalltalk.GraphRenderer)})},
 args: ["pt", "node"],
-source: "drawPoint: pt forNode: node\x0a\x09|w|\x0a\x09w := 10.\x0a\x09ctx fillStyle: 'orange';\x0a\x09\x09fillRect: (pt x - (w / 2)) y: (pt y - (w / 2)) width: w height: w;\x0a\x09\x09fillStyle: 'black';\x0a\x09\x09font: 'italic 13px sans-serif';\x0a\x09\x09fillText: node name x: (pt x + 8) y: pt y + 8",
-messageSends: ["fillStyle:", "fillRect:y:width:height:", "-", "/", "x", "y", "font:", "fillText:x:y:", "name", "+"],
-referencedClasses: []
+source: "drawPoint: pt forNode: node\x0a\x09|w|\x0a\x09w := 10.\x0a\x09ctx fillStyle: ( GraphSettings nodeColor );\x0a\x09\x09beginPath;\x0a\x09\x09arc: (pt x ) y: ( pt y  ) w: ( GraphSettings nodeWidth ) h:0 r: ( Math PI * 2 ); \x0a\x09\x09closePath;\x0a\x09\x09fill;\x0a\x09\x09fillStyle: ( GraphSettings textColor );\x0a\x09\x09font: ( GraphSettings font );\x0a\x09\x09fillText: node name x: (pt x - ( GraphSettings nodeWidth * 2 )) y: ( pt y + (GraphSettings nodeWidth * 2) )\x0a\x09\x09",
+messageSends: ["fillStyle:", "nodeColor", "beginPath", "arc:y:w:h:r:", "x", "y", "nodeWidth", "*", "PI", "closePath", "fill", "textColor", "font:", "font", "fillText:x:y:", "name", "-", "+"],
+referencedClasses: ["GraphSettings", "Math"]
 }),
 smalltalk.GraphRenderer);
 
@@ -555,6 +558,174 @@ messageSends: ["setCanvas:", "new", "yourself"],
 referencedClasses: []
 }),
 smalltalk.GraphRenderer.klass);
+
+
+smalltalk.addClass('GraphSettings', smalltalk.Object, [], 'Graphs');
+
+smalltalk.GraphSettings.klass.iVarNames = ['font','nodeColor','nodeWidth','textColor'];
+smalltalk.addMethod(
+"_font",
+smalltalk.method({
+selector: "font",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { var $1,$2;
+$1=self["@font"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@font"]="14px italic verdana";
+self["@font"];
+} else {
+$1;
+};
+$2=self["@font"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"font",{},smalltalk.GraphSettings.klass)})},
+args: [],
+source: "font\x0a\x09font ifNil: [ font := '14px italic verdana' ].\x0a\x09^font",
+messageSends: ["ifNil:"],
+referencedClasses: []
+}),
+smalltalk.GraphSettings.klass);
+
+smalltalk.addMethod(
+"_font_",
+smalltalk.method({
+selector: "font:",
+category: 'not yet classified',
+fn: function (aFont){
+var self=this;
+return smalltalk.withContext(function($ctx1) { self["@font"]=aFont;
+return self}, function($ctx1) {$ctx1.fill(self,"font:",{aFont:aFont},smalltalk.GraphSettings.klass)})},
+args: ["aFont"],
+source: "font: aFont\x0a\x09font := aFont",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.GraphSettings.klass);
+
+smalltalk.addMethod(
+"_nodeColor",
+smalltalk.method({
+selector: "nodeColor",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { var $1,$2;
+$1=self["@nodeColor"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@nodeColor"]="red";
+self["@nodeColor"];
+} else {
+$1;
+};
+$2=self["@nodeColor"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"nodeColor",{},smalltalk.GraphSettings.klass)})},
+args: [],
+source: "nodeColor\x0a\x09nodeColor ifNil: [ nodeColor := 'red' ].\x0a\x09^nodeColor",
+messageSends: ["ifNil:"],
+referencedClasses: []
+}),
+smalltalk.GraphSettings.klass);
+
+smalltalk.addMethod(
+"_nodeColor_",
+smalltalk.method({
+selector: "nodeColor:",
+category: 'not yet classified',
+fn: function (aNodeColor){
+var self=this;
+return smalltalk.withContext(function($ctx1) { self["@nodeColor"]=aNodeColor;
+return self}, function($ctx1) {$ctx1.fill(self,"nodeColor:",{aNodeColor:aNodeColor},smalltalk.GraphSettings.klass)})},
+args: ["aNodeColor"],
+source: "nodeColor: aNodeColor\x0a\x09nodeColor := aNodeColor",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.GraphSettings.klass);
+
+smalltalk.addMethod(
+"_nodeWidth",
+smalltalk.method({
+selector: "nodeWidth",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { var $1,$2;
+$1=self["@nodeWidth"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@nodeWidth"]=(10);
+self["@nodeWidth"];
+} else {
+$1;
+};
+$2=self["@nodeWidth"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"nodeWidth",{},smalltalk.GraphSettings.klass)})},
+args: [],
+source: "nodeWidth\x0a\x09nodeWidth ifNil: [ nodeWidth := 10 ].\x0a\x09^nodeWidth",
+messageSends: ["ifNil:"],
+referencedClasses: []
+}),
+smalltalk.GraphSettings.klass);
+
+smalltalk.addMethod(
+"_nodeWidth_",
+smalltalk.method({
+selector: "nodeWidth:",
+category: 'not yet classified',
+fn: function (aWidth){
+var self=this;
+return smalltalk.withContext(function($ctx1) { self["@nodeWidth"]=aWidth;
+return self}, function($ctx1) {$ctx1.fill(self,"nodeWidth:",{aWidth:aWidth},smalltalk.GraphSettings.klass)})},
+args: ["aWidth"],
+source: "nodeWidth: aWidth\x0a\x09nodeWidth := aWidth",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.GraphSettings.klass);
+
+smalltalk.addMethod(
+"_textColor",
+smalltalk.method({
+selector: "textColor",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { var $1,$2;
+$1=self["@textColor"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@textColor"]="black";
+self["@textColor"];
+} else {
+$1;
+};
+$2=self["@textColor"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"textColor",{},smalltalk.GraphSettings.klass)})},
+args: [],
+source: "textColor\x0a\x09textColor ifNil: [ textColor := 'black' ].\x0a\x09^textColor",
+messageSends: ["ifNil:"],
+referencedClasses: []
+}),
+smalltalk.GraphSettings.klass);
+
+smalltalk.addMethod(
+"_textColor_",
+smalltalk.method({
+selector: "textColor:",
+category: 'not yet classified',
+fn: function (aTextColor){
+var self=this;
+return smalltalk.withContext(function($ctx1) { self["@textColor"]=aTextColor;
+return self}, function($ctx1) {$ctx1.fill(self,"textColor:",{aTextColor:aTextColor},smalltalk.GraphSettings.klass)})},
+args: ["aTextColor"],
+source: "textColor: aTextColor\x0a\x09textColor :=  aTextColor",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.GraphSettings.klass);
 
 
 smalltalk.addClass('GraphVisualizer', smalltalk.Object, ['socket', 'logged'], 'Graphs');
@@ -863,31 +1034,51 @@ referencedClasses: ["GraphVisualizer"]
 smalltalk.GraphVisualizer.klass);
 
 smalltalk.addMethod(
+"_resize_",
+smalltalk.method({
+selector: "resize:",
+category: 'not yet classified',
+fn: function (aCanvas){
+var self=this;
+return smalltalk.withContext(function($ctx1) { _st(aCanvas)._width_(_st(_st(window)._innerWidth()).__minus((20)));
+_st(aCanvas)._height_(_st(_st(window)._innerHeight()).__minus((30)));
+return self}, function($ctx1) {$ctx1.fill(self,"resize:",{aCanvas:aCanvas},smalltalk.GraphVisualizer.klass)})},
+args: ["aCanvas"],
+source: "resize: aCanvas\x0a\x09aCanvas width: ( window innerWidth - 20 ).\x0a   aCanvas height: ( window innerHeight - 30 )",
+messageSends: ["width:", "-", "innerWidth", "height:", "innerHeight"],
+referencedClasses: []
+}),
+smalltalk.GraphVisualizer.klass);
+
+smalltalk.addMethod(
 "_sys",
 smalltalk.method({
 selector: "sys",
 category: 'not yet classified',
 fn: function (){
 var self=this;
-var renderer;
+var canvas,renderer;
 return smalltalk.withContext(function($ctx1) { var $1,$2;
 $1=self["@sys"];
 if(($receiver = $1) == nil || $receiver == undefined){
 self["@sys"]=_st(_st(arbor)._ParticleSystem())._value_((1000));
 self["@sys"];
-_st(self["@sys"])._parameters_(smalltalk.HashedCollection._fromPairs_([_st("gravity").__minus_gt(true)]));
-renderer=_st(_st((smalltalk.GraphRenderer || GraphRenderer))._newWithCanvas_(_st(_st(_st("#").__comma("viewport"))._asJQuery())._at_((0))))._jsInterface();
-renderer;
-_st(_st(self["@sys"])._asJQuery())._attr_set_("renderer",renderer);
+_st(_st(_st(self["@sys"])._parameters())._asJQuery())._attr_value_("gravity",true);
+canvas=_st((smalltalk.GraphRenderer || GraphRenderer))._newWithCanvas_(_st(_st(_st("#").__comma("viewport"))._asJQuery())._at_((0)));
+canvas;
+_st(self)._updateRendererWithCanvas_(_st(canvas)._canvas());
+_st(window)._onresize_((function(){
+return smalltalk.withContext(function($ctx2) {return _st(self)._updateRendererWithCanvas_(_st(canvas)._canvas());
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 } else {
 $1;
 };
 $2=self["@sys"];
 return $2;
-}, function($ctx1) {$ctx1.fill(self,"sys",{renderer:renderer},smalltalk.GraphVisualizer.klass)})},
+}, function($ctx1) {$ctx1.fill(self,"sys",{canvas:canvas,renderer:renderer},smalltalk.GraphVisualizer.klass)})},
 args: [],
-source: "sys\x0a\x09| renderer |\x0a\x09sys ifNil: [ \x0a\x09\x09sys := (arbor ParticleSystem) value: 1000.\x0a\x09    sys parameters: #{ 'gravity' -> true }.\x0a\x09\x09renderer := (GraphRenderer newWithCanvas: ( ('#', 'viewport')  asJQuery at: 0 ) ) jsInterface.\x0a\x09\x09( sys asJQuery ) attr: 'renderer' set: renderer.\x0a\x09].\x0a\x09^sys",
-messageSends: ["ifNil:", "value:", "ParticleSystem", "parameters:", "->", "jsInterface", "newWithCanvas:", "at:", "asJQuery", ",", "attr:set:"],
+source: "sys\x0a\x09| canvas renderer |\x0a\x09\x09sys ifNil: [ \x0a\x09\x09sys := (arbor ParticleSystem) value: 1000.\x0a\x09\x09( sys parameters ) asJQuery attr: 'gravity'  value:  true.\x0a\x09\x09canvas := (GraphRenderer newWithCanvas: ( ('#', 'viewport')  asJQuery at: 0 ) ).\x0a\x09\x09self updateRendererWithCanvas: ( canvas canvas ).\x0a\x09\x09window onresize: [\x0a\x09\x09\x09\x09\x09self updateRendererWithCanvas: ( canvas canvas ).\x0a\x09\x09].\x0a\x09].\x0a\x09^sys",
+messageSends: ["ifNil:", "value:", "ParticleSystem", "attr:value:", "asJQuery", "parameters", "newWithCanvas:", "at:", ",", "updateRendererWithCanvas:", "canvas", "onresize:"],
 referencedClasses: ["GraphRenderer"]
 }),
 smalltalk.GraphVisualizer.klass);
@@ -905,6 +1096,26 @@ args: ["aSys"],
 source: "sys: aSys\x0a\x09sys := aSys",
 messageSends: [],
 referencedClasses: []
+}),
+smalltalk.GraphVisualizer.klass);
+
+smalltalk.addMethod(
+"_updateRendererWithCanvas_",
+smalltalk.method({
+selector: "updateRendererWithCanvas:",
+category: 'not yet classified',
+fn: function (aCanvas){
+var self=this;
+var newCanvas,newRenderer;
+return smalltalk.withContext(function($ctx1) { _st(self)._resize_(aCanvas);
+newCanvas=_st((smalltalk.GraphRenderer || GraphRenderer))._newWithCanvas_(_st(_st(_st("#").__comma("viewport"))._asJQuery())._at_((0)));
+newRenderer=_st(newCanvas)._jsInterface();
+_st(_st(self["@sys"])._asJQuery())._attr_set_("renderer",newRenderer);
+return self}, function($ctx1) {$ctx1.fill(self,"updateRendererWithCanvas:",{aCanvas:aCanvas,newCanvas:newCanvas,newRenderer:newRenderer},smalltalk.GraphVisualizer.klass)})},
+args: ["aCanvas"],
+source: "updateRendererWithCanvas: aCanvas\x0a\x09| newCanvas newRenderer |\x0a\x09self resize: ( aCanvas ).\x0a\x09newCanvas := (GraphRenderer newWithCanvas: ( ('#', 'viewport')  asJQuery at: 0 ) ).\x0a\x09newRenderer := newCanvas jsInterface.\x0a\x09( sys asJQuery ) attr: 'renderer' set: newRenderer.",
+messageSends: ["resize:", "newWithCanvas:", "at:", "asJQuery", ",", "jsInterface", "attr:set:"],
+referencedClasses: ["GraphRenderer"]
 }),
 smalltalk.GraphVisualizer.klass);
 
