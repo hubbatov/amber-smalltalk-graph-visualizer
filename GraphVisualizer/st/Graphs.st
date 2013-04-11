@@ -52,7 +52,8 @@ setRenderer: aRenderer
 !GraphMouseHandler methodsFor: 'initialization'!
 
 createHandler
-	handler := #{'clicked' -> [:event | self clicked: event].
+	handler := #{
+		'clicked' -> [:event | self clicked: event].
 		'dragged' -> [:event | self dragged: event].
 		'dropped' -> [:event | self dropped: event]}
 !
@@ -100,7 +101,8 @@ dropped: event
 getMousePositionForEvent: event
 	| pos mousePosition |
 	pos := renderer canvas asJQuery offset.
-	mousePosition := arbor Point: (event pageX - pos left) y: (event pageY - pos top).
+	mousePosition := NativeFunction constructor: 'arbor.Point' value:  (event pageX - pos left)  value: (event pageY - pos top).
+	^mousePosition
 ! !
 
 !GraphMouseHandler class methodsFor: 'instance creation'!
@@ -183,7 +185,7 @@ redraw
 !GraphRenderer methodsFor: 'initiaization'!
 
 initializeMouseHandling
- 	"mouseHandler := (GraphMouseHandler newForRenderer: self)"
+ 	mouseHandler := (GraphMouseHandler newForRenderer: self)
 !
 
 initializeWithSystem: aSystem

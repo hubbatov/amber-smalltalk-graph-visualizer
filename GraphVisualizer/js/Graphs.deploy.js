@@ -186,10 +186,13 @@ selector: "getMousePositionForEvent:",
 fn: function (event){
 var self=this;
 var pos,mousePosition;
-return smalltalk.withContext(function($ctx1) { pos=_st(_st(_st(self["@renderer"])._canvas())._asJQuery())._offset();
-mousePosition=_st(arbor)._Point_y_(_st(_st(event)._pageX()).__minus(_st(pos)._left()),_st(_st(event)._pageY()).__minus(_st(pos)._top()));
-return self}, function($ctx1) {$ctx1.fill(self,"getMousePositionForEvent:",{event:event,pos:pos,mousePosition:mousePosition},smalltalk.GraphMouseHandler)})},
-messageSends: ["offset", "asJQuery", "canvas", "Point:y:", "-", "left", "pageX", "top", "pageY"]}),
+return smalltalk.withContext(function($ctx1) { var $1;
+pos=_st(_st(_st(self["@renderer"])._canvas())._asJQuery())._offset();
+mousePosition=_st((smalltalk.NativeFunction || NativeFunction))._constructor_value_value_("arbor.Point",_st(_st(event)._pageX()).__minus(_st(pos)._left()),_st(_st(event)._pageY()).__minus(_st(pos)._top()));
+$1=mousePosition;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"getMousePositionForEvent:",{event:event,pos:pos,mousePosition:mousePosition},smalltalk.GraphMouseHandler)})},
+messageSends: ["offset", "asJQuery", "canvas", "constructor:value:value:", "-", "left", "pageX", "top", "pageY"]}),
 smalltalk.GraphMouseHandler);
 
 smalltalk.addMethod(
@@ -318,8 +321,9 @@ smalltalk.method({
 selector: "initializeMouseHandling",
 fn: function (){
 var self=this;
-return smalltalk.withContext(function($ctx1) { return self}, function($ctx1) {$ctx1.fill(self,"initializeMouseHandling",{},smalltalk.GraphRenderer)})},
-messageSends: []}),
+return smalltalk.withContext(function($ctx1) { self["@mouseHandler"]=_st((smalltalk.GraphMouseHandler || GraphMouseHandler))._newForRenderer_(self);
+return self}, function($ctx1) {$ctx1.fill(self,"initializeMouseHandling",{},smalltalk.GraphRenderer)})},
+messageSends: ["newForRenderer:"]}),
 smalltalk.GraphRenderer);
 
 smalltalk.addMethod(
